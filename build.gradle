@@ -1,0 +1,53 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+}
+
+apply plugin: 'java-library'
+apply plugin: 'maven-publish'
+
+group = 'grabsky.core'
+version = '0.9.0-pre'
+
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
+
+javadoc {
+    (options as CoreJavadocOptions).addStringOption('Xdoclint:none', '-quiet')
+}
+
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'com.github.grabsky'
+            artifactId = 'core'
+            version = version
+            from components.java
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven { url 'https://repo.papermc.io/repository/maven-public/' }
+    maven { url 'https://jitpack.io/' }
+}
+
+dependencies {
+    // lombok
+    compileOnly 'org.projectlombok:lombok:1.18.24'
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+    // jetbrains annotations
+    compileOnly("org.jetbrains:annotations:23.0.0")
+    // dependencies
+    api 'io.papermc.paper:paper-api:1.19.2-R0.1-SNAPSHOT'
+    api 'io.papermc:paperlib:1.0.6'
+    api 'com.github.Revxrsal.Lamp:common:3.1.0'
+    api 'com.github.Revxrsal.Lamp:bukkit:3.1.0'
+    api 'com.github.Revxrsal.Lamp:brigadier:3.1.0'
+}
