@@ -1,4 +1,4 @@
-package grabsky.core.math;
+package grabsky.core.util;
 
 import lombok.AccessLevel;
 import lombok.Getter;

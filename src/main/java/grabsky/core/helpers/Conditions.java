@@ -1,4 +1,4 @@
-package grabsky.core.util;
+package grabsky.core.helpers;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,6 +13,7 @@ public final class Conditions {
         if (value == null) throw exception;
         // returning the value otherwise
         return value;
+
     }
 
     /**

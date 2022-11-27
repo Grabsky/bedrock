@@ -1,4 +1,4 @@
-package grabsky.core.registry;
+package grabsky.core.util;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
