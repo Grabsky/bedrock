@@ -10,6 +10,7 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
  * Utility class containing quality-of-life methods for sending messages.
  * All messages sent using methods defined within that class, are <b>SYSTEM</b>
  *
+ * @see <a href=https://docs.adventure.kyori.net/minimessage/format.html>MiniMessage Documentation</a>
  * @see <a href=https://gist.github.com/kennytv/ed783dd244ca0321bbd882c347892874>Chat Signing Overview</a> by <a href=https://github.com/kennytv>kennytv</a>
  */
 public final class SystemMessenger {
@@ -56,7 +57,7 @@ public final class SystemMessenger {
      * Sends provided {@link Component} {@code (message)} to specific {@link Audience} {@code (audience)}.
      */
     public static void sendMessage(final Audience audience, final Component message) {
-        if (message != null && message == Component.empty())
+        if (message != null && message != Component.empty())
             audience.sendMessage(message, MessageType.SYSTEM);
     }
 
@@ -64,7 +65,7 @@ public final class SystemMessenger {
      * Sends provided {@link Component} {@code (message)} to specific {@link Audience} {@code (audience)} as {@link Identity} {@code (identity)}.
      */
     public static void sendMessage(final Audience audience, final Identity identity, final Component message) {
-        if (message != null && message == Component.empty())
+        if (message != null && message != Component.empty())
             audience.sendMessage(identity, message, MessageType.SYSTEM);
     }
 
