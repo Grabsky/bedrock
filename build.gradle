@@ -1,41 +1,52 @@
 plugins {
-    id 'java-library'
+    id 'java'
     id 'maven-publish'
 }
 
-apply plugin: 'java-library'
-apply plugin: 'maven-publish'
-
-group = 'grabsky.core'
-version = '0.9.0-pre'
+group = 'cloud.grabsky'
+version = '0.1.0-SNAPSHOT'
 
 sourceCompatibility = JavaVersion.VERSION_17
 targetCompatibility = JavaVersion.VERSION_17
 
-javadoc {
-    (options as CoreJavadocOptions).addStringOption('Xdoclint:none', '-quiet')
-}
-
-java {
-    withSourcesJar()
-    withJavadocJar()
-}
+final isSnapshot = version.endsWith('-SNAPSHOT')
+final hash7 = 'git rev-parse --verify --short HEAD'.execute().text.trim()
 
 publishing {
+    repositories {
+        maven {
+            name 'Cloud'
+            url (isSnapshot == true ? 'https://repo.grabsky.cloud/snapshots' : 'https://repo.grabsky.cloud/releases')
+            credentials {
+                username System.getenv('REPO_USERNAME')
+                password System.getenv('REPO_SECRET')
+            }
+            authentication { basic(BasicAuthentication) }
+        }
+    }
     publications {
         maven(MavenPublication) {
-            groupId = 'com.github.grabsky'
-            artifactId = 'core'
-            version = version
+            artifactId rootProject.name
+            version (isSnapshot == true ? hash7 : version)
             from components.java
         }
     }
 }
 
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+javadoc {
+    (options as CoreJavadocOptions).addStringOption('Xdoclint:none', '-quiet')
+}
+
 repositories {
+    mavenLocal()
     mavenCentral()
+    maven { url 'https://repo.grabsky.cloud/releases' }
     maven { url 'https://repo.papermc.io/repository/maven-public/' }
-    maven { url 'https://jitpack.io/' }
 }
 
 dependencies {
@@ -43,11 +54,7 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.24'
     annotationProcessor 'org.projectlombok:lombok:1.18.24'
     // jetbrains annotations
-    compileOnly("org.jetbrains:annotations:23.0.0")
-    // dependencies
-    api 'io.papermc.paper:paper-api:1.19.2-R0.1-SNAPSHOT'
-    api 'io.papermc:paperlib:1.0.6'
-    api 'com.github.Revxrsal.Lamp:common:3.1.0'
-    api 'com.github.Revxrsal.Lamp:bukkit:3.1.0'
-    api 'com.github.Revxrsal.Lamp:brigadier:3.1.0'
+    compileOnly 'org.jetbrains:annotations:24.0.0'
+    // paper
+    compileOnly 'io.papermc.paper:paper-api:1.19.3-R0.1-SNAPSHOT'
 }

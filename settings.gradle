@@ -4,4 +4,4 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'core'
+rootProject.name = 'bedrock'
