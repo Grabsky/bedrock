@@ -29,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * {@link Interval} is light-weight (and not very extensible) object that simplifies
+ * {@link Interval} is simple (but not very extensible) object that provides methods for
  * unit conversion and creation of human-readable 'elapsed time' strings.
  */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
@@ -94,7 +94,6 @@ public class Interval {
         return builder.toString();
     }
 
-    @Accessors(fluent = true)
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     public enum Unit {
         MILLISECONDS(1L),

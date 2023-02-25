@@ -25,13 +25,11 @@ package cloud.grabsky.bedrock;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.experimental.Accessors;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
- * Main class of every plugin utilizing this library <i>should</i> extend {@link BedrockPlugin} which is based on {@link JavaPlugin}.
+ * {@link BedrockPlugin} provides enhanced features for plugins extending it.
  */
-@Accessors(fluent = true)
 public abstract class BedrockPlugin extends JavaPlugin {
 
     @Getter(AccessLevel.PUBLIC)
@@ -43,7 +41,9 @@ public abstract class BedrockPlugin extends JavaPlugin {
     }
 
     /**
-     * Reloads the plugin in a safe way, basically.
+     * Defines "safe" plugin reload logic that can be called manually.
+     *
+     * @apiNote This method <b><u>is not</u></b> called on server start-up or reload by default.
      */
     public abstract boolean onReload();
 
