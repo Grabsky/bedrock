@@ -33,11 +33,12 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 
 /**
  * Utility class containing quality-of-life methods for sending messages.
- * All messages sent using methods defined within that class, are <b>SYSTEM</b>
+ * All messages sent using methods defined within that class, are <b>SYSTEM</b> type.
  *
- * @see <a href=https://docs.adventure.kyori.net/minimessage/format.html>MiniMessage Documentation</a>
+ * @see <a href=https://docs.advntr.dev/minimessage/index.html>MiniMessage Documentation</a>
  * @see <a href=https://gist.github.com/kennytv/ed783dd244ca0321bbd882c347892874>Chat Signing Overview</a> by <a href=https://github.com/kennytv>kennytv</a>
  */
+// TO-DO: Address deprecated calls.
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class SystemMessenger {
 

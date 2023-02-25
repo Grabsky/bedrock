@@ -31,14 +31,14 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Registries work in a similar way to maps, in fact, they use a {@link HashMap} as a storage for KEY-VALUE pairs.
+ * {@link Registry} is a container that wraps around {@link HashMap} to provide simplified method calls.
  *
- * @param <K> key
- * @param <V> value
+ * @param <K> key type
+ * @param <V> value type
  */
 public abstract class Registry<K, V> {
 
-    private final Map<K, V> internalMap = new HashMap<>();
+    private final HashMap<K, V> internalMap = new HashMap<>();
 
     /**
      * Returns {@link V} associated with specified {@link K} {@code (key)} or {@code null}.
@@ -50,7 +50,7 @@ public abstract class Registry<K, V> {
     /**
      * Associates specified {@link K} {@code (key)} with specified {@link V} {@code (value)}. If key already exists, it's value is overriden.
      */
-    public @NotNull Registry<K, V> set(final K key, final V value) {
+    public @NotNull Registry<K, V> set(final @NotNull K key, final @Nullable V value) {
         internalMap.put(key, value);
         return this;
     }
