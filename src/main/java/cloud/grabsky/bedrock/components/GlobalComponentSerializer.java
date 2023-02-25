@@ -24,9 +24,7 @@
 package cloud.grabsky.bedrock.components;
 
 import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.standard.StandardTags;
 
@@ -40,6 +38,7 @@ import java.util.function.Function;
 public final class GlobalComponentSerializer {
 
     private static MiniMessage instance = MiniMessage.miniMessage();
+
     private static MiniMessage.Builder builder = MiniMessage.builder()
             .editTags((adder) -> {
                 adder.resolver(StandardTags.color());
