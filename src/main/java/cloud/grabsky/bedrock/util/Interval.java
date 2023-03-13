@@ -41,14 +41,14 @@ public class Interval {
      * Returns {@link Interval} object constructed from provided {@link Float float} {@code (interval)}.
      * It is expected that provided value is <u>already</u> a difference between two timestamps.
      */
-    public Interval of(final long interval, final Unit unit) {
+    public static Interval of(final long interval, final Unit unit) {
         return new Interval(interval * unit.factor);
     }
 
     /**
      * Returns {@link Interval} of time between {@code n} and {@code m}.
      */
-    public Interval between(final long n, final long m, final Unit unit) {
+    public static Interval between(final long n, final long m, final Unit unit) {
         return new Interval((n - m) * unit.factor);
     }
 
