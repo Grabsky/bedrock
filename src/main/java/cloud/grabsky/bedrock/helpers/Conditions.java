@@ -36,7 +36,6 @@ public final class Conditions {
         if (value == null) throw exception;
         // returning the value otherwise
         return value;
-
     }
 
     /**

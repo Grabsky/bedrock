@@ -29,6 +29,8 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentBuilder;
+import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 
 /**
@@ -38,7 +40,6 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
  * @see <a href=https://docs.advntr.dev/minimessage/index.html>MiniMessage Documentation</a>
  * @see <a href=https://gist.github.com/kennytv/ed783dd244ca0321bbd882c347892874>Chat Signing Overview</a> by <a href=https://github.com/kennytv>kennytv</a>
  */
-// TO-DO: Address deprecated calls.
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class SystemMessenger {
 
@@ -48,7 +49,7 @@ public final class SystemMessenger {
      */
     public static void sendMessage(final Audience audience, final String message) {
         if (message != null && "".equals(message) == false)
-            audience.sendMessage(GlobalComponentSerializer.get().deserialize(message), MessageType.SYSTEM);
+            audience.sendMessage(GlobalComponentSerializer.get().deserialize(message));
     }
 
     /**
@@ -57,27 +58,7 @@ public final class SystemMessenger {
      */
     public static void sendMessage(final Audience audience, final String message, final TagResolver... resolvers) {
         if (message != null && "".equals(message) == false)
-            audience.sendMessage(GlobalComponentSerializer.get().deserialize(message, resolvers), MessageType.SYSTEM);
-    }
-
-    /**
-     * Sends provided {@link String} {@code (message)}, serialized using {@link GlobalComponentSerializer#get()},
-     * to specific {@link Audience} {@code (audience)} as {@link Identity} {@code (identity)}.
-     * Empty {@code ("")} or {@code null} messages are ignored.
-     */
-    public static void sendMessage(final Audience sender, final Identity identity, final String message) {
-        if (message != null && "".equals(message) == false)
-            sender.sendMessage(identity, GlobalComponentSerializer.get().deserialize(message), MessageType.SYSTEM);
-    }
-
-    /**
-     * Sends provided {@link String} {@code (message)}, serialized using {@link GlobalComponentSerializer#get()},
-     * to specific {@link Audience} {@code (audience)} as {@link Identity} {@code (identity)}.
-     * Empty {@code ("")} or {@code null} messages are ignored.
-     */
-    public static void sendMessage(final Audience sender, final Identity identity, final String message, final TagResolver... resolvers) {
-        if (message != null && "".equals(message) == false)
-            sender.sendMessage(identity, GlobalComponentSerializer.get().deserialize(message, resolvers), MessageType.SYSTEM);
+            audience.sendMessage(GlobalComponentSerializer.get().deserialize(message, resolvers));
     }
 
     /**
@@ -85,15 +66,8 @@ public final class SystemMessenger {
      */
     public static void sendMessage(final Audience audience, final Component message) {
         if (message != null && message != Component.empty())
-            audience.sendMessage(message, MessageType.SYSTEM);
+            audience.sendMessage(message);
     }
 
-    /**
-     * Sends provided {@link Component} {@code (message)} to specific {@link Audience} {@code (audience)} as {@link Identity} {@code (identity)}.
-     */
-    public static void sendMessage(final Audience audience, final Identity identity, final Component message) {
-        if (message != null && message != Component.empty())
-            audience.sendMessage(identity, message, MessageType.SYSTEM);
-    }
 
 }
