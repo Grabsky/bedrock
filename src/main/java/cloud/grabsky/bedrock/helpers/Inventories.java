@@ -21,8 +21,8 @@ public final class Inventories {
         final ItemMeta metaFirst = first.getItemMeta();
         final ItemMeta metaSecond = second.getItemMeta();
         return first.getType() == second.getType()
-                && (metaFirst.hasDisplayName() == false && metaSecond.hasDisplayName() == false) || metaFirst.displayName().equals(metaSecond.displayName()) == true
-                && (metaFirst.hasLore() == false && metaSecond.hasLore() == false) || metaFirst.lore().equals(metaSecond.lore()) == true;
+                && metaFirst.displayName() == metaSecond.displayName()
+                && metaFirst.lore() == metaSecond.lore();
     }
 
     @Experimental
