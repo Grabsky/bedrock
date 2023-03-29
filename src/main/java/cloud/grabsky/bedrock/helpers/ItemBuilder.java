@@ -1,6 +1,5 @@
 package cloud.grabsky.bedrock.helpers;
 
-import cloud.grabsky.bedrock.util.Iterables;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 import it.unimi.dsi.fastutil.Pair;
