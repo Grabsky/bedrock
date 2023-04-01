@@ -26,11 +26,7 @@ package cloud.grabsky.bedrock.components;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.audience.MessageType;
-import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.ComponentBuilder;
-import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 
 /**
@@ -40,6 +36,7 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
  * @see <a href=https://docs.advntr.dev/minimessage/index.html>MiniMessage Documentation</a>
  * @see <a href=https://gist.github.com/kennytv/ed783dd244ca0321bbd882c347892874>Chat Signing Overview</a> by <a href=https://github.com/kennytv>kennytv</a>
  */
+@Deprecated(forRemoval = true)
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class SystemMessenger {
 
@@ -47,6 +44,7 @@ public final class SystemMessenger {
      * Sends provided {@link String} {@code (message)}, serialized using {@link GlobalComponentSerializer#get()},
      * to specific {@link Audience} {@code (audience)}. Empty {@code ("")} or {@code null} messages are ignored.
      */
+    @Deprecated(forRemoval = true)
     public static void sendMessage(final Audience audience, final String message) {
         if (message != null && "".equals(message) == false)
             audience.sendMessage(GlobalComponentSerializer.get().deserialize(message));
@@ -56,6 +54,7 @@ public final class SystemMessenger {
      * Sends provided {@link String} {@code (message)}, serialized using {@link GlobalComponentSerializer#get()},
      * to specific {@link Audience} {@code (audience)}. Empty {@code ("")} or {@code null} messages are ignored.
      */
+    @Deprecated(forRemoval = true)
     public static void sendMessage(final Audience audience, final String message, final TagResolver... resolvers) {
         if (message != null && "".equals(message) == false)
             audience.sendMessage(GlobalComponentSerializer.get().deserialize(message, resolvers));
@@ -64,6 +63,7 @@ public final class SystemMessenger {
     /**
      * Sends provided {@link Component} {@code (message)} to specific {@link Audience} {@code (audience)}.
      */
+    @Deprecated(forRemoval = true)
     public static void sendMessage(final Audience audience, final Component message) {
         if (message != null && message != Component.empty())
             audience.sendMessage(message);
