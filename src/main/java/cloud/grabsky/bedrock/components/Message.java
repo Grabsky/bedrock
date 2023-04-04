@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.Keyed;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
@@ -64,6 +65,15 @@ public sealed class Message<T> permits Message.StringMessage, Message.ComponentM
          */
         public StringMessage placeholder(final @NotNull String name, final @NotNull Component value) {
             resolverBuilder.resolver(component(name, value));
+            return this;
+        }
+
+        /**
+         * Creates and adds {@link Placeholder} of <b>{@code name}</b> to be replaced with result of {@link Key#asString Key#asString} called on {@link Keyed#key Keyed#key}.
+         */
+        // TO-DO: Replace with enhanced swtich once it leaves preview.
+        public StringMessage placeholder(final @NotNull String name, final @NotNull Keyed value) {
+            resolverBuilder.resolver(unparsed(name, value.key().asString()));
             return this;
         }
 
