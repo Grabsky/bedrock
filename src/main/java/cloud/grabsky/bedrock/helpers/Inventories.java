@@ -8,9 +8,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.ApiStatus.Experimental;
 import org.jetbrains.annotations.NotNull;
 
-import static org.jetbrains.annotations.ApiStatus.Internal;
-
-@Internal
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Inventories {
 
@@ -20,9 +17,17 @@ public final class Inventories {
     public static boolean isSimilar(final @NotNull ItemStack first, final @NotNull ItemStack second) {
         final ItemMeta metaFirst = first.getItemMeta();
         final ItemMeta metaSecond = second.getItemMeta();
-        return first.getType() == second.getType()
-                && metaFirst.displayName() == metaSecond.displayName()
-                && metaFirst.lore() == metaSecond.lore();
+        // Comparing by types...
+        if (first.getType() != second.getType())
+            return false;
+        // Comparing display names...
+        if (metaFirst.hasDisplayName() == true && metaSecond.hasDisplayName() == true && metaFirst.displayName().equals(metaSecond.displayName()) == false)
+            return false;
+        // Comparing lores...
+        if (metaFirst.hasLore() == true && metaSecond.hasLore() == true && metaFirst.lore().equals(metaSecond.lore()) == false)
+            return false;
+        // ...
+        return true;
     }
 
     @Experimental
