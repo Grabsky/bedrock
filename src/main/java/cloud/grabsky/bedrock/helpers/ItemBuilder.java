@@ -25,7 +25,7 @@ import static cloud.grabsky.bedrock.util.Iterables.merge;
 import static cloud.grabsky.bedrock.util.Iterables.toList;
 import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
 
-public class ItemBuilder {
+public final class ItemBuilder {
 
     private final ItemStack item;
 
