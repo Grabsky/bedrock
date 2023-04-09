@@ -3,6 +3,9 @@
 [![](https://www.codefactor.io/repository/github/grabsky/bedrock/badge/main)](https://www.codefactor.io/repository/github/grabsky/bedrock/overview/main)  
 Multi-purpose library aiming to make development of **[PaperMC/Paper](https://github.com/PaperMC/Paper)** plugins faster.
 
+> **Warning**  
+> Breaking changes are likely to happen before a stable release. Use at your own risk.
+
 <br />
 
 ## Requirements
@@ -23,7 +26,7 @@ dependencies {
     implementation 'cloud.grabsky:bedrock:[version]'
 }
 ```
-Consider **[relocating](https://imperceptiblethoughts.com/shadow/configuration/relocation/)** to prevent version mismatch issues.
+Consider **[relocating](https://imperceptiblethoughts.com/shadow/configuration/relocation/)** to prevent version mismatch issues. This can be ignored if your plugin is a **[Paper plugin](https://docs.papermc.io/paper/dev/getting-started/paper-plugins)** with **[isolated classloader](https://docs.papermc.io/paper/dev/getting-started/paper-plugins#classloading-isolation)**.
 
 <br />
 
