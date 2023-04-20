@@ -4,7 +4,7 @@
 Multi-purpose library aiming to make development of **[PaperMC/Paper](https://github.com/PaperMC/Paper)** plugins faster.
 
 > **Warning**  
-> Breaking changes are likely to happen before a stable release. Use at your own risk.
+> Breaking changes are likely to happen before a stable release.
 
 <br />
 
@@ -23,7 +23,7 @@ repositories {
 Then specify dependency:
 ```groovy
 dependencies {
-    implementation 'cloud.grabsky:bedrock:[version]'
+    implementation 'cloud.grabsky:bedrock:[_VERSION_]'
 }
 ```
 Consider **[relocating](https://imperceptiblethoughts.com/shadow/configuration/relocation/)** to prevent version mismatch issues. This can be ignored if your plugin is a **[Paper plugin](https://docs.papermc.io/paper/dev/getting-started/paper-plugins)** with **[isolated classloader](https://docs.papermc.io/paper/dev/getting-started/paper-plugins#classloading-isolation)**.
@@ -35,9 +35,9 @@ Consider **[relocating](https://imperceptiblethoughts.com/shadow/configuration/r
 # Cloning repository
 $ git clone https://github.com/Grabsky/bedrock.git
 # Entering cloned repository
-$ cd ./configuration
+$ cd ./bedrock
 # Compiling and publishing to maven local
-$ ./gradlew clean test publishToMavenLocal
+$ ./gradlew clean publishToMavenLocal
 ```
 
 <br />
