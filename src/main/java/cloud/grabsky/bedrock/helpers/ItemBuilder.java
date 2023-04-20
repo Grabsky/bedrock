@@ -25,7 +25,6 @@ package cloud.grabsky.bedrock.helpers;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
-import it.unimi.dsi.fastutil.Pair;
 import lombok.AccessLevel;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
@@ -40,6 +39,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Range;
 
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -48,6 +49,7 @@ import static cloud.grabsky.bedrock.util.Iterables.merge;
 import static cloud.grabsky.bedrock.util.Iterables.toList;
 import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
 
+// TO-DO: Use Paper's Item Property API when available. (https://github.com/PaperMC/Paper/pull/8711)
 public final class ItemBuilder {
 
     private final ItemStack item;
@@ -57,7 +59,7 @@ public final class ItemBuilder {
 
     private static final UUID EMPTY_UUID = UUID.nameUUIDFromBytes(new byte[0]);
 
-    public ItemBuilder(final @NotNull Material material, final int amount) {
+    public ItemBuilder(final @NotNull Material material, final @Range(from = 1, to = 64) int amount) {
         this.item = new ItemStack(material, amount);
         this.meta = item.getItemMeta();
     }
@@ -67,17 +69,17 @@ public final class ItemBuilder {
         this.meta = item.getItemMeta();
     }
 
-    public ItemBuilder setName(final @NotNull Component name) {
+    public @NotNull ItemBuilder setName(final @NotNull Component name) {
         meta.displayName(name);
         return this;
     }
 
-    public ItemBuilder setName(final @NotNull String name) {
+    public @NotNull ItemBuilder setName(final @NotNull String name) {
         meta.displayName(miniMessage().deserialize(name));
         return this;
     }
 
-    public ItemBuilder setLore(final String... lines) {
+    public @NotNull ItemBuilder setLore(final @NotNull String... lines) {
         meta.lore(
                 Stream.of(lines)
                         .map(s -> miniMessage().deserialize(s))
@@ -86,40 +88,32 @@ public final class ItemBuilder {
         return this;
     }
 
-    public ItemBuilder setLore(final @NotNull Component... lines) {
+    public @NotNull ItemBuilder setLore(final @NotNull Component... lines) {
         meta.lore(toList(lines));
         return this;
     }
 
-    public ItemBuilder addLore(final @NotNull Component... lines) {
+    public @NotNull ItemBuilder addLore(final @NotNull Component... lines) {
         meta.lore(merge(meta.lore(), toList(lines)));
         return this;
     }
 
-    public ItemBuilder addLore(final @NotNull String... lines) {
+    public @NotNull ItemBuilder addLore(final @NotNull String... lines) {
         meta.lore(merge(meta.lore(), toList(lines, (e) -> miniMessage().deserialize(e))));
         return this;
     }
 
-    public ItemBuilder setCustomModelData(final int value) {
+    public @NotNull ItemBuilder setCustomModelData(final int value) {
         meta.setCustomModelData(value);
         return this;
     }
 
-    public ItemBuilder setItemFlags(final @NotNull ItemFlag... itemFlags) {
+    public @NotNull ItemBuilder setItemFlags(final @NotNull ItemFlag... itemFlags) {
         meta.addItemFlags(itemFlags);
         return this;
     }
 
-    @SafeVarargs
-    public final ItemBuilder setEnchantments(final @NotNull Pair<Enchantment, Integer>... enchantments) {
-        for (final Pair<Enchantment, Integer> pair : enchantments) {
-            meta.addEnchant(pair.first(), pair.second(), true);
-        }
-        return this;
-    }
-
-    public ItemBuilder addEnchantment(final @NotNull Enchantment enchantment, final int level) {
+    public @NotNull ItemBuilder addEnchantment(final @NotNull Enchantment enchantment, final int level) {
         meta.addEnchant(enchantment, level, true);
         return this;
     }
@@ -142,12 +136,17 @@ public final class ItemBuilder {
         return this;
     }
 
-    public <T, Z> ItemBuilder setPersistentData(final NamespacedKey key, final PersistentDataType<T, Z> persistentDataType, final Z value) {
-        meta.getPersistentDataContainer().set(key, persistentDataType, value);
+    public <T, Z> ItemBuilder setPersistentData(final @NotNull NamespacedKey key, final @NotNull PersistentDataType<T, Z> type, final @Nullable Z value) {
+        // Setting entry...
+        if (value != null)
+            meta.getPersistentDataContainer().set(key, type, value);
+            // Removing entry if 'null' is provided.
+        else if (meta.getPersistentDataContainer().has(key, type) == true)
+            meta.getPersistentDataContainer().remove(key);
         return this;
     }
 
-    public ItemStack build() {
+    public @NotNull ItemStack build() {
         item.setItemMeta(meta);
         return item;
     }
