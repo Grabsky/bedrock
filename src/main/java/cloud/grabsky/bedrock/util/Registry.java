@@ -43,7 +43,7 @@ public abstract class Registry<K, V> {
     /**
      * Returns {@link V} associated with specified {@link K} {@code (key)} or {@code null}.
      */
-    public @Nullable V get(final K key) {
+    public @Nullable V get(final @NotNull K key) {
         return internalMap.get(key);
     }
 

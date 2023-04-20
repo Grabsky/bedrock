@@ -74,7 +74,7 @@ public final class Inventories {
     }
 
     @Experimental
-    public static boolean hasSimilarItems(final @NotNull Player player, final ItemStack... items) {
+    public static boolean hasSimilarItems(final @NotNull Player player, final @NotNull ItemStack... items) {
         final int[] conditions = new int[items.length];
         for (final ItemStack inventoryItem : player.getInventory().getStorageContents()) {
             for (int i = 0; i < items.length; i++) {

@@ -58,7 +58,7 @@ public final class Iterables {
         return newArray;
     }
 
-    public static @NotNull <T> List<T> merge(final @Nullable List<T> original, @NotNull final T extra) {
+    public static <T> @NotNull List<T> merge(final @Nullable List<T> original, final @NotNull T extra) {
         if (original == null) return List.of(extra);
         // ...
         final ArrayList<T> result = new ArrayList<T>(original);

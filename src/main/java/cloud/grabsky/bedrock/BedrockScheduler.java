@@ -24,17 +24,20 @@
 package cloud.grabsky.bedrock;
 
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
-public class BedrockScheduler {
+public final class BedrockScheduler {
 
-    private final BedrockPlugin bedrockPlugin;
+    @Getter(AccessLevel.PUBLIC)
+    private final @NotNull BedrockPlugin bedrockPlugin;
 
     /**
      * Schedules a synchronous task to run after {@code delay} of ticks has passed.
@@ -42,7 +45,7 @@ public class BedrockScheduler {
      * @param delay ticks to wait before executing the task
      * @param task a task
      */
-    public void run(final long delay, final Consumer<BukkitTask> task) {
+    public void run(final long delay, final @NotNull Consumer<BukkitTask> task) {
         bedrockPlugin.getServer().getScheduler().runTaskLater(bedrockPlugin, task, delay);
     }
 
@@ -51,7 +54,7 @@ public class BedrockScheduler {
      *
      * @param delay ticks to wait before executing the task
      */
-    public void runAsync(final long delay, final Consumer<BukkitTask> task) {
+    public void runAsync(final long delay, final @NotNull Consumer<BukkitTask> task) {
         bedrockPlugin.getServer().getScheduler().runTaskLaterAsynchronously(bedrockPlugin, task, delay);
     }
 
@@ -63,16 +66,16 @@ public class BedrockScheduler {
      * @param period ticks to wait in-between tasks
      * @param cycles max iterations
      */
-    public void repeat(final long delay, final long period, final long cycles, final Predicate<Integer> task) {
+    public void repeat(final long delay, final long period, final long cycles, final @NotNull Predicate<Integer> task) {
         new BukkitRunnable() {
             int cycle = 1;
 
             @Override
             public void run() {
-                // Executing the code and cancelling the task if 'false' is returned
+                // Executing the code and cancelling the task if 'false' is returned.
                 if (task.test(cycle) == true)
                     this.cancel();
-                // Cancelling the task if iterations limit is reached
+                // Cancelling the task if iterations limit is reached.
                 if (cycle++ > cycles)
                     this.cancel();
             }
@@ -87,16 +90,16 @@ public class BedrockScheduler {
      * @param period ticks to wait in-between tasks
      * @param cycles max iterations
      */
-    public void repeatAsync(final long delay, final long period, final long cycles, final Predicate<Integer> task) {
+    public void repeatAsync(final long delay, final long period, final long cycles, final @NotNull Predicate<Integer> task) {
         new BukkitRunnable() {
             int cycle = 1;
 
             @Override
             public void run() {
-                // Executing the code and cancelling the task if 'false' is returned
+                // Executing the code and cancelling the task if 'false' is returned.
                 if (task.test(cycle) == true)
                     this.cancel();
-                // Cancelling the task if iterations limit is reached
+                // Cancelling the task if iterations limit is reached.
                 if (cycle++ > cycles)
                     this.cancel();
             }

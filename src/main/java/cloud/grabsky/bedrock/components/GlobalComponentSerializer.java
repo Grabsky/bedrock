@@ -27,6 +27,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.standard.StandardTags;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
 
@@ -54,7 +55,7 @@ public final class GlobalComponentSerializer {
     /**
      * Returns currently held instance of {@link MiniMessage}.
      */
-    public static MiniMessage get() {
+    public static @NotNull MiniMessage get() {
         return instance;
     }
 
@@ -62,7 +63,7 @@ public final class GlobalComponentSerializer {
      * Applies modifications to private {@link MiniMessage.Builder} and re-builds
      * underlying {@link MiniMessage} instance accessible by {@link GlobalComponentSerializer#get()}
      */
-    public static void inject(final Function<MiniMessage.Builder, MiniMessage.Builder> function) {
+    public static void inject(final @NotNull Function<MiniMessage.Builder, MiniMessage.Builder> function) {
         // applying modifications on the current builder...
         builder = function.apply(builder);
         // rebuilding...

@@ -26,14 +26,14 @@ package cloud.grabsky.bedrock.util;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.Accessors;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * {@link Interval} is simple (but not very extensible) object that provides methods for
  * unit conversion and creation of human-readable 'elapsed time' strings.
  */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public class Interval {
+public final class Interval {
 
     private final long interval;
 
@@ -41,14 +41,14 @@ public class Interval {
      * Returns {@link Interval} object constructed from provided {@link Float float} {@code (interval)}.
      * It is expected that provided value is <u>already</u> a difference between two timestamps.
      */
-    public static Interval of(final long interval, final Unit unit) {
+    public static @NotNull Interval of(final long interval, final @NotNull Unit unit) {
         return new Interval(interval * unit.factor);
     }
 
     /**
      * Returns {@link Interval} of time between {@code n} and {@code m}.
      */
-    public static Interval between(final long n, final long m, final Unit unit) {
+    public static @NotNull Interval between(final long n, final long m, final @NotNull Unit unit) {
         return new Interval((n - m) * unit.factor);
     }
 
@@ -59,7 +59,7 @@ public class Interval {
      * Interval.of(300, Interval.Unit.SECONDS).as(Interval.Unit.MINUTES) // 5F
      * </pre>
      */
-    public float as(final Unit unit) {
+    public float as(final @NotNull Unit unit) {
         return (float) (interval / unit.factor);
     }
 
@@ -71,7 +71,7 @@ public class Interval {
      * </pre>
      */
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         // returning 0s for values below 1000 (ms)
         if (interval < 1000) return "0s";
         // calculating some values (the ugly way)

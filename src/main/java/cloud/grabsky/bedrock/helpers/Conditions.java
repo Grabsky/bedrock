@@ -23,25 +23,29 @@
  */
 package cloud.grabsky.bedrock.helpers;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Conditions {
 
     /**
      * Returns {@link T} ({@code value}) if not {@code null} or throws {@link E} ({@code exception}) otherwise.
      */
-    public static <T, E extends Throwable> @NotNull T requirePresent(@Nullable final T value, final E exception) throws E {
-        // throwing specified exception if value is null
-        if (value == null) throw exception;
-        // returning the value otherwise
+    public static <T, E extends Throwable> @NotNull T requirePresent(@Nullable final T value, final @NotNull E exception) throws E {
+        // Throwing provided exception in case provided value is 'null'.
+        if (value == null)
+            throw exception;
+        // Returning the value otherwise.
         return value;
     }
 
     /**
      * Returns {@link T} ({@code value}) if not {@code null} or {@link T} ({@code def}) otherwise.
      */
-    public static <T> @NotNull T requirePresent(@Nullable final T value, final T def) {
+    public static <T> @NotNull T requirePresent(final @Nullable T value, final @NotNull T def) {
         return (value != null) ? value : def;
     }
 

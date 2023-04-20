@@ -23,6 +23,7 @@
  */
 package cloud.grabsky.bedrock.inventory;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -36,6 +37,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Range;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,86 +47,91 @@ import java.util.function.Predicate;
 
 public class Panel implements InventoryHolder {
 
-    public interface ClickAction extends Consumer<InventoryClickEvent> { /* EMPTY */ }
+    public interface ClickAction extends Consumer<InventoryClickEvent> { /* EMPTY */
 
-    @Getter private final Inventory inventory; // Overrides `InventoryHolder#getInventory`
-    @Getter private final Map<Integer, ClickAction> actions;
-    @Getter private final ClickAction clickAction;
+    }
 
-    public Panel(@NotNull final Component title, final int size, final ClickAction onClickCommon) {
+    @Getter(AccessLevel.PUBLIC)
+    private final Inventory inventory; // @Getter creates override for InventoryHolder#getInventory.
+
+    @Getter(AccessLevel.PUBLIC)
+    private final Map<Integer, ClickAction> actions;
+
+    @Getter(AccessLevel.PUBLIC)
+    private final ClickAction clickAction;
+
+    public Panel(final @NotNull Component title, final @Range(from = 9, to = 54) int size, final @Nullable ClickAction onClickShared) {
         this.inventory = Bukkit.createInventory(this, size, title);
         this.actions = new HashMap<>(size);
-        this.clickAction = onClickCommon;
+        this.clickAction = onClickShared;
     }
 
-    public Panel setItem(final int slot, @Nullable final ItemStack item, @Nullable final ClickAction onClick) {
+    public @NotNull Panel setItem(final int slot, final @Nullable ItemStack item, final @Nullable ClickAction onClick) {
         inventory.setItem(slot, item);
         actions.put(slot, onClick);
-        // ...
         return this;
     }
 
-    public Panel removeItem(final int slot) {
+    public @NotNull Panel removeItem(final int slot) {
         inventory.setItem(slot, null);
         actions.remove(slot);
-        // ...
         return this;
     }
 
-    public Panel applyTemplate(final Consumer<Panel> template, final boolean clearCurrent) {
-        if (clearCurrent == true) {
+    public @NotNull Panel applyTemplate(final @NotNull Consumer<Panel> template, final boolean clearCurrent) {
+        // Clearing inventory before applying template (if requested)
+        if (clearCurrent == true)
             inventory.clear();
-        }
-        // Applying the view
+        // Applying the template.
         template.accept(this);
-        // ...
         return this;
     }
 
-    public Panel clear() {
+    public @NotNull Panel clear() {
         inventory.clear();
         actions.clear();
-        // ...
         return this;
     }
 
-    public Panel open(final HumanEntity human, @Nullable final Predicate<Panel> onPreOpen) {
+    public @NotNull Panel open(final @NotNull HumanEntity human, final @Nullable Predicate<Panel> onPreOpen) {
         // Cancelling if PreOpenAction returns 'false'
         if (onPreOpen != null && onPreOpen.test(this) == false)
             return this;
         // Opening inventory to the HumanEntity
         human.openInventory(inventory);
-        // ...
         return this;
     }
 
-    public Panel close() {
+    public @NotNull Panel close() {
         inventory.close();
-        // ...
         return this;
     }
 
-    public static void registerListener(final Plugin plugin) {
+    public static void registerListener(final @NotNull Plugin plugin) {
         plugin.getServer().getPluginManager().registerEvents(new Listener() {
 
-            private final HashMap<UUID, Long> cooldowns = new HashMap<>(); // TO-DO: Name it better.
+            private final HashMap<UUID, Long> cooldowns = new HashMap<>();
 
             @EventHandler
-            public void onPanelInventoryClick(final InventoryClickEvent event) {
+            public void onPanelInventoryClick(final @NotNull InventoryClickEvent event) {
                 // Ignoring clicks outside inventory
-                if (event.getClickedInventory() == null) return;
+                if (event.getClickedInventory() == null)
+                    return;
                 // Ignoring non-panel inventories
                 if (event.getWhoClicked().getOpenInventory().getTopInventory().getHolder() instanceof final Panel panel) {
                     // Since we're dealing with a custom inventory, cancelling the event is necessary
                     event.setCancelled(true);
                     // Ignoring clicks outside of the Panel inventory
-                    if (event.getClickedInventory().getHolder() != panel) return;
+                    if (event.getClickedInventory().getHolder() != panel)
+                        return;
                     // Returning if no acction is associated with clicked slot
-                    if (panel.getActions().get(event.getSlot()) == null) return;
-                    // Handling cooldown
+                    if (panel.getActions().get(event.getSlot()) == null)
+                        return;
+                    // Handling cooldown...
                     final long lastClick = cooldowns.getOrDefault(event.getWhoClicked().getUniqueId(), 0L);
-                    if (lastClick != 0L && (System.currentTimeMillis() - lastClick) < 150L) return;
-                    // Updating cooldown
+                    if (lastClick != 0L && (System.currentTimeMillis() - lastClick) < 150L)
+                        return;
+                    // Updating cooldown...
                     cooldowns.put(event.getWhoClicked().getUniqueId(), System.currentTimeMillis());
                     // PLaying sound if allowed
                     if (panel.getClickAction() != null) {
