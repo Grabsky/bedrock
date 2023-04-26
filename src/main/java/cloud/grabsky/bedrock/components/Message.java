@@ -23,6 +23,7 @@
  */
 package cloud.grabsky.bedrock.components;
 
+import cloud.grabsky.bedrock.Sendable;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,12 +31,18 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextReplacementConfig;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.ApiStatus.Experimental;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
+import java.util.function.Predicate;
 
 import static java.lang.String.valueOf;
 import static net.kyori.adventure.text.minimessage.tag.resolver.Placeholder.component;
@@ -45,7 +52,7 @@ import static net.kyori.adventure.text.minimessage.tag.resolver.Placeholder.unpa
  * {@link Message} class simplifies creation and sending of context-dependent messages of various types.
  */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public abstract sealed class Message<T> permits Message.StringMessage, Message.ComponentMessage {
+public abstract sealed class Message<T> implements Sendable permits Message.StringMessage, Message.ComponentMessage {
 
     /**
      * Returns plain {@link String} currently held by this {@link Message} instance.
@@ -53,18 +60,11 @@ public abstract sealed class Message<T> permits Message.StringMessage, Message.C
     @Getter(AccessLevel.PUBLIC)
     protected @Nullable T message;
 
-    /**
-     * Sends message contained by (this) {@link Message} instance to provided {@link Audience}.
-     */
-    public abstract void send(final @NotNull Audience audience);
 
     /**
-     * Sends message contained by (this) {@link Message} instance to all players.
+     * Returns new instance of {@link StringMessage StringMessage} which uses {@link MiniMessage} as a (de)serialization strategy.
      */
-    public abstract void broadcast();
-
-
-    public static Message<String> of(final @Nullable String message) {
+    public static StringMessage of(final @Nullable String message) {
         return new StringMessage(message);
     }
 
@@ -79,7 +79,7 @@ public abstract sealed class Message<T> permits Message.StringMessage, Message.C
         /**
          * Replaces all occurences of <b>{@code target}</b> with <b>{@code to}</b>.
          */
-        public StringMessage replace(final @NotNull String target, final @NotNull String replacement) {
+        public @NotNull StringMessage replace(final @NotNull String target, final @NotNull String replacement) {
             if (message == null)
                 return this;
             // ...
@@ -90,7 +90,7 @@ public abstract sealed class Message<T> permits Message.StringMessage, Message.C
         /**
          * Creates and adds {@link Placeholder} of <b>{@code name}</b> to be replaced with <b>{@code value}</b>.
          */
-        public StringMessage placeholder(final @NotNull String name, final @NotNull String value) {
+        public @NotNull StringMessage placeholder(final @NotNull String name, final @NotNull String value) {
             resolverBuilder.resolver(unparsed(name, value));
             return this;
         }
@@ -98,7 +98,7 @@ public abstract sealed class Message<T> permits Message.StringMessage, Message.C
         /**
          * Creates and adds {@link Placeholder} of <b>{@code name}</b> to be replaced with <b>{@code value}</b>.
          */
-        public StringMessage placeholder(final @NotNull String name, final @NotNull Component value) {
+        public @NotNull StringMessage placeholder(final @NotNull String name, final @NotNull Component value) {
             resolverBuilder.resolver(component(name, value));
             return this;
         }
@@ -107,7 +107,7 @@ public abstract sealed class Message<T> permits Message.StringMessage, Message.C
          * Creates and adds {@link Placeholder} of <b>{@code name}</b> to be replaced with result of {@link Key#asString Key#asString} called on {@link Keyed#key Keyed#key}.
          */
         // TO-DO: Replace with enhanced swtich once it leaves preview.
-        public StringMessage placeholder(final @NotNull String name, final @NotNull Keyed value) {
+        public @NotNull StringMessage placeholder(final @NotNull String name, final @NotNull Keyed value) {
             resolverBuilder.resolver(unparsed(name, value.key().asString()));
             return this;
         }
@@ -116,16 +116,19 @@ public abstract sealed class Message<T> permits Message.StringMessage, Message.C
          * Creates and adds {@link Placeholder} of <b>{@code name}</b> to be replaced with result of {@link Player#getName Player#getName} called on <b>{@code value}</b>.
          */
         // TO-DO: Replace with enhanced swtich once it leaves preview.
-        public StringMessage placeholder(final @NotNull String name, final @NotNull Player value) {
+        public @NotNull StringMessage placeholder(final @NotNull String name, final @NotNull Player value) {
             resolverBuilder.resolver(unparsed(name, value.getName()));
             return this;
         }
 
         /**
          * Creates and adds {@link Placeholder} of <b>{@code name}</b> to be replaced with result of {@link Object#toString Object#toString} called on <b>{@code value}</b>.
+         *
+         * @apiNote This is an experimental API that can change or disappear at any time.
          */
         // TO-DO: Replace with enhanced swtich once it leaves preview.
-        public StringMessage placeholder(final @NotNull String name, final @NotNull Object value) {
+        @Experimental
+        public @NotNull StringMessage placeholder(final @NotNull String name, final @NotNull Object value) {
             resolverBuilder.resolver(unparsed(name, valueOf(value)));
             return this;
         }
@@ -133,7 +136,7 @@ public abstract sealed class Message<T> permits Message.StringMessage, Message.C
         /**
          * Adds array of {@link TagResolver} to this {@link Message}.
          */
-        public StringMessage resolvers(final @NotNull TagResolver... resolvers) {
+        public @NotNull StringMessage resolvers(final @NotNull TagResolver... resolvers) {
             resolverBuilder.resolvers(resolvers);
             return this;
         }
@@ -153,6 +156,26 @@ public abstract sealed class Message<T> permits Message.StringMessage, Message.C
         }
 
         @Override
+        public void broadcast(final @NotNull Predicate<Player> predicate) {
+            // Ignoring empty/blank messages.
+            if (message == null || ("").equals(message) == true)
+                return;
+            // Collecting a list of players that matches provided predicate.
+            final List<? extends Player> players = Bukkit.getOnlinePlayers().stream().filter(predicate).toList();
+            // Ignoring in case list is empty.
+            if (players.size() == 0)
+                return;
+            // Parsing using MiniMessage instance provided by GlobalComponentSerializer.
+            final Component component = GlobalComponentSerializer.get().deserialize(message, resolverBuilder.build());
+            // Ignoring empty/blank messages.
+            if (Component.empty().equals(component) == true)
+                return;
+            // Broadcasting message to the players.
+            for (final Player player : players)
+                player.sendMessage(component);
+        }
+
+        @Override
         public void broadcast() {
             // Ignoring empty/blank messages.
             if (message == null || ("").equals(message) == true)
@@ -169,7 +192,10 @@ public abstract sealed class Message<T> permits Message.StringMessage, Message.C
     }
 
 
-    public static Message<Component> of(final @Nullable Component message) {
+    /**
+     * Returns new instance of {@link ComponentMessage ComponentMessage}.
+     */
+    public static ComponentMessage of(final @Nullable Component message) {
         return new ComponentMessage(message);
     }
 
@@ -179,6 +205,17 @@ public abstract sealed class Message<T> permits Message.StringMessage, Message.C
             super(message);
         }
 
+        /**
+         * Replaces all occurences of <b>{@code target}</b> with <b>{@code to}</b>.
+         */
+        public @NotNull ComponentMessage replace(final @NotNull String target, final @NotNull String replacement) {
+            if (message == null)
+                return this;
+            // ...
+            this.message = message.replaceText(TextReplacementConfig.builder().matchLiteral(target).replacement(replacement).build());
+            return this;
+        }
+
         @Override
         public void send(final @NotNull Audience audience) {
             // Ignoring empty/blank messages.
@@ -186,6 +223,21 @@ public abstract sealed class Message<T> permits Message.StringMessage, Message.C
                 return;
             // Sending message to the provided audience.
             audience.sendMessage(message);
+        }
+
+        @Override
+        public void broadcast(final @NotNull Predicate<Player> predicate) {
+            // Ignoring empty/blank messages.
+            if (message == null || Component.empty().equals(message)== true)
+                return;
+            // Collecting a list of players that matches provided predicate.
+            final List<? extends Player> players = Bukkit.getOnlinePlayers().stream().filter(predicate).toList();
+            // Ignoring in case list is empty.
+            if (players.size() == 0)
+                return;
+            // Broadcasting message to the players.
+            for (final Player player : players)
+                player.sendMessage(message);
         }
 
         @Override
