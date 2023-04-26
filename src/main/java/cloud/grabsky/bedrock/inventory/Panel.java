@@ -23,6 +23,8 @@
  */
 package cloud.grabsky.bedrock.inventory;
 
+import cloud.grabsky.bedrock.util.Interval;
+import cloud.grabsky.bedrock.util.Interval.Unit;
 import lombok.AccessLevel;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
@@ -45,19 +47,16 @@ import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
+import static java.lang.System.currentTimeMillis;
+
 public class Panel implements InventoryHolder {
 
-    public interface ClickAction extends Consumer<InventoryClickEvent> { /* EMPTY */
+    public interface ClickAction extends Consumer<InventoryClickEvent> { /* EMPTY */ }
 
-    }
-
-    @Getter(AccessLevel.PUBLIC)
+    @Getter(value = AccessLevel.PUBLIC)
     private final Inventory inventory; // @Getter creates override for InventoryHolder#getInventory.
 
-    @Getter(AccessLevel.PUBLIC)
     private final Map<Integer, ClickAction> actions;
-
-    @Getter(AccessLevel.PUBLIC)
     private final ClickAction clickAction;
 
     public Panel(final @NotNull Component title, final @Range(from = 9, to = 54) int size, final @Nullable ClickAction onClickShared) {
@@ -81,7 +80,7 @@ public class Panel implements InventoryHolder {
     public @NotNull Panel applyTemplate(final @NotNull Consumer<Panel> template, final boolean clearCurrent) {
         // Clearing inventory before applying template (if requested)
         if (clearCurrent == true)
-            inventory.clear();
+            this.clear();
         // Applying the template.
         template.accept(this);
         return this;
@@ -112,37 +111,41 @@ public class Panel implements InventoryHolder {
 
             private final HashMap<UUID, Long> cooldowns = new HashMap<>();
 
-            @EventHandler
+            @EventHandler(ignoreCancelled = true)
             public void onPanelInventoryClick(final @NotNull InventoryClickEvent event) {
-                // Ignoring clicks outside inventory
+                // Ignoring clicks outside the inventory.
                 if (event.getClickedInventory() == null)
                     return;
-                // Ignoring non-panel inventories
+                // Ignoring non-panel inventories.
                 if (event.getWhoClicked().getOpenInventory().getTopInventory().getHolder() instanceof final Panel panel) {
-                    // Since we're dealing with a custom inventory, cancelling the event is necessary
+                    // Cancelling the event to prevent moving items between slots or inventories.
                     event.setCancelled(true);
-                    // Ignoring clicks outside of the Panel inventory
+                    // Ignoring clicks outside of the Panel inventory.
                     if (event.getClickedInventory().getHolder() != panel)
                         return;
-                    // Returning if no acction is associated with clicked slot
-                    if (panel.getActions().get(event.getSlot()) == null)
+                    // Returning in case no action has been assigned to the clicked slot.
+                    if (panel.actions.get(event.getSlot()) == null)
                         return;
                     // Handling cooldown...
-                    final long lastClick = cooldowns.getOrDefault(event.getWhoClicked().getUniqueId(), 0L);
-                    if (lastClick != 0L && (System.currentTimeMillis() - lastClick) < 150L)
+                    if (Interval.between(currentTimeMillis(), cooldowns.getOrDefault(event.getWhoClicked().getUniqueId(), 0L), Unit.MILLISECONDS).as(Unit.MILLISECONDS) < 200L)
                         return;
-                    // Updating cooldown...
-                    cooldowns.put(event.getWhoClicked().getUniqueId(), System.currentTimeMillis());
-                    // PLaying sound if allowed
-                    if (panel.getClickAction() != null) {
-                        panel.getClickAction().accept(event);
+                    // ...setting cooldown
+                    cooldowns.put(event.getWhoClicked().getUniqueId(), currentTimeMillis());
+                    // Executing click actions. Wrapped with a try-catch block to make sure inventory is closed in case of an error.
+                    try {
+                        // Executing "shared" click action.
+                        if (panel.clickAction != null)
+                            panel.clickAction.accept(event);
+                        // Executing slot-specific click action.
+                        panel.actions.get(event.getSlot()).accept(event);
+                    } catch (final Exception e) {
+                        panel.close();
                     }
-                    // Executing action associated with clicked slot (aka clicked item)
-                    panel.getActions().get(event.getSlot()).accept(event);
                 }
             }
 
         }, plugin);
+
     }
 
 }
