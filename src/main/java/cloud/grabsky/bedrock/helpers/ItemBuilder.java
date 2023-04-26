@@ -43,6 +43,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 
 import java.util.UUID;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import static cloud.grabsky.bedrock.util.Iterables.merge;
@@ -143,6 +144,11 @@ public final class ItemBuilder {
             // Removing entry if 'null' is provided.
         else if (meta.getPersistentDataContainer().has(key, type) == true)
             meta.getPersistentDataContainer().remove(key);
+        return this;
+    }
+
+    public @NotNull ItemBuilder edit(final @NotNull Consumer<ItemMeta> consumer) {
+        consumer.accept(meta);
         return this;
     }
 
