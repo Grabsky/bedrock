@@ -32,6 +32,11 @@ publishing {
     }
 }
 
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
 javadoc {
     (options as CoreJavadocOptions).addStringOption("Xdoclint:none", "-quiet")
 }
