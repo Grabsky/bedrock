@@ -25,16 +25,11 @@ publishing {
     }
     publications {
         maven(MavenPublication) {
+            from components.java
             artifactId = rootProject.name
             version = (isSnapshot == true ? hash7 : version)
-            from components.java
         }
     }
-}
-
-java {
-    withJavadocJar()
-    withSourcesJar()
 }
 
 javadoc {
@@ -42,6 +37,7 @@ javadoc {
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
     maven { url "https://repo.papermc.io/repository/maven-public/" }
 }
