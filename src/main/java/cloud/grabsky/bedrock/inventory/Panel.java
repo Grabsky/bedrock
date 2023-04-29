@@ -92,54 +92,55 @@ public abstract class Panel implements InventoryHolder {
     @SuppressWarnings({"unchecked", "rawtypes"})
     public abstract static class Builder<T extends Panel> {
 
-        @Getter(AccessLevel.PUBLIC)
-        private @NotNull Component title = InventoryType.CHEST.defaultTitle();
+        protected Component title = InventoryType.CHEST.defaultTitle();
 
         public @NotNull Builder<T> setTitle(final @NotNull Component title) {
             this.title = title; return this.self();
         }
 
-        @Getter(AccessLevel.PUBLIC)
-        private @NotNull InventoryType inventoryType = InventoryType.CHEST;
+        protected InventoryType inventoryType = InventoryType.CHEST;
 
         public @NotNull Builder<T> setInventoryType(final @NotNull InventoryType type) {
             this.inventoryType = type; return this.self();
         }
 
-        @Getter(AccessLevel.PUBLIC)
-        private @Range(from = 0, to = 5) int rows = 0;
+        protected int rows = 0;
 
-        public Builder<T> setRows(final @Range(from = 0, to = 5) int rows) {
-            this.rows = rows; return this.self();
+        public @NotNull Builder<T> setRows(final @Range(from = 0, to = 5) int rows) {
+            this.rows = rows;
+            return this.self();
         }
 
-        @Getter(AccessLevel.PUBLIC)
-        private @NotNull Consumer<InventoryOpenEvent> inventoryOpenAction = (Consumer) EMPTY_CONSUMER;
+        protected Consumer<InventoryOpenEvent> onInventoryOpen = (Consumer) EMPTY_CONSUMER;
 
-        public Builder<T> setInventoryOpenAction(final @NotNull Consumer<InventoryOpenEvent> inventoryOpenAction) {
-            this.inventoryOpenAction = inventoryOpenAction; return this.self();
+        public @NotNull Builder<T> setInventoryOpenAction(final @NotNull Consumer<InventoryOpenEvent> onInventoryOpen) {
+            this.onInventoryOpen = onInventoryOpen;
+            return this.self();
         }
 
-        @Getter(AccessLevel.PUBLIC)
-        private @NotNull Consumer<InventoryCloseEvent> inventoryCloseAction = (Consumer) EMPTY_CONSUMER;
+        protected Consumer<InventoryCloseEvent> onInventoryClose = (Consumer) EMPTY_CONSUMER;
 
-        public Builder<T> setInventoryCloseAction(final @NotNull Consumer<InventoryCloseEvent> inventoryCloseAction) {
-            this.inventoryCloseAction = inventoryCloseAction; return this.self();
+        public @NotNull Builder<T> setInventoryCloseAction(final @NotNull Consumer<InventoryCloseEvent> onInventoryClose) {
+            this.onInventoryClose = onInventoryClose;
+            return this.self();
         }
 
-        @Getter(AccessLevel.PUBLIC)
-        private @NotNull Consumer<InventoryClickEvent> inventoryClickAction = (Consumer) EMPTY_CONSUMER;
+        protected Consumer<InventoryClickEvent> onInventoryClick = (Consumer) EMPTY_CONSUMER;
 
-        public Builder<T> setInventoryClickAction(final @NotNull Consumer<InventoryClickEvent> inventoryClickAction) {
-            this.inventoryClickAction = inventoryClickAction; return this.self();
+        public @NotNull Builder<T> setInventoryClickAction(final @NotNull Consumer<InventoryClickEvent> onInventoryClick) {
+            this.onInventoryClick = onInventoryClick;
+            return this.self();
         }
 
-        public abstract Builder<T> self();
+        protected abstract @NotNull Builder<T> self();
 
-        public abstract T build();
+        public abstract @NotNull T build();
 
     }
 
+    /**
+     * Sets contents of specified slot to given {@link ItemStack}. Optionally {@link ClickAction ClickAction} can be specifed.
+     */
     public void setItem(final int slot, final @Nullable ItemStack item, final @Nullable ClickAction onClick) {
         inventory.setItem(slot, item);
         actions.put(slot, onClick);
@@ -150,6 +151,9 @@ public abstract class Panel implements InventoryHolder {
         actions.remove(slot);
     }
 
+    /**
+     * Applies specified template on (this) {@link Panel}.
+     */
     public void applyTemplate(final @NotNull Consumer<Panel> template, final boolean clearCurrent) {
         // Clearing inventory before applying template (if requested)
         if (clearCurrent == true)
@@ -158,11 +162,17 @@ public abstract class Panel implements InventoryHolder {
         template.accept(this);
     }
 
+    /**
+     * Clears (this) {@link Panel}. This includes items and actions.
+     */
     public void clear() {
         inventory.clear();
         actions.clear();
     }
 
+    /**
+     * Opens (this) {@link Panel} to specific {@link HumanEntity}.
+     */
     public void open(final @NotNull HumanEntity human, final @Nullable Predicate<Panel> onPreInventoryOpen) {
         // Cancelling if PreOpenAction returns 'false'
         if (onPreInventoryOpen != null && onPreInventoryOpen.test(this) == false)
@@ -171,6 +181,9 @@ public abstract class Panel implements InventoryHolder {
         human.openInventory(inventory);
     }
 
+    /**
+     * Closes (this) {@link Panel} for all viewers.
+     */
     public void close() {
         inventory.close();
     }
