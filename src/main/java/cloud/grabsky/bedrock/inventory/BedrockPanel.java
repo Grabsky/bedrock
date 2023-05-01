@@ -49,7 +49,7 @@ public final class BedrockPanel extends Panel {
     public final static class Builder extends Panel.Builder<BedrockPanel> {
 
         @Override
-        public @NotNull Builder self() {
+        protected @NotNull Builder self() {
             return this;
         }
 

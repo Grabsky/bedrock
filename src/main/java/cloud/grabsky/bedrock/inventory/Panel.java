@@ -146,6 +146,9 @@ public abstract class Panel implements InventoryHolder {
         actions.put(slot, onClick);
     }
 
+    /**
+     * Removes contents of specified slot and associated {@link ClickAction}.
+     */
     public void removeItem(final int slot) {
         inventory.setItem(slot, null);
         actions.remove(slot);
