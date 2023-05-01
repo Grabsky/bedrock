@@ -166,7 +166,7 @@ public abstract class Panel implements InventoryHolder {
     }
 
     /**
-     * Clears (this) {@link Panel}. This includes items and actions.
+     * Clears contents of (this) {@link Panel} including associated click actions.
      */
     public void clear() {
         inventory.clear();
