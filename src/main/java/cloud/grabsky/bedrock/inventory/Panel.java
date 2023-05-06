@@ -232,6 +232,7 @@ public abstract class Panel implements InventoryHolder {
                     // Executing slot-specific click action.
                     onClick.accept(event);
                 } catch (final Exception e) {
+                    e.printStackTrace();
                     panel.close();
                 }
             }
