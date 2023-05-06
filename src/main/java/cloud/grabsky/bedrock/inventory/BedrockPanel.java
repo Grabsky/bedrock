@@ -38,7 +38,7 @@ public final class BedrockPanel extends Panel {
     private BedrockPanel(
             final @NotNull Component title,
             final @NotNull InventoryType type,
-            final @Range(from = 0, to = 5) int rows,
+            final @Range(from = 0, to = 6) int rows,
             final @NotNull Consumer<InventoryOpenEvent> onInventoryOpen,
             final @NotNull Consumer<InventoryCloseEvent> onInventoryClose,
             final @NotNull Consumer<InventoryClickEvent> onInventoryClick

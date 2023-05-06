@@ -106,7 +106,7 @@ public abstract class Panel implements InventoryHolder {
 
         protected int rows = 0;
 
-        public @NotNull Builder<T> setRows(final @Range(from = 0, to = 5) int rows) {
+        public @NotNull Builder<T> setRows(final @Range(from = 0, to = 6) int rows) {
             this.rows = rows;
             return this.self();
         }
