@@ -152,6 +152,12 @@ public final class ItemBuilder {
         return this;
     }
 
+    @SuppressWarnings("unchecked")
+    public <T extends ItemMeta> @NotNull ItemBuilder edit(final @NotNull Class<T> type, final @NotNull Consumer<T> consumer) {
+        consumer.accept((T) meta);
+        return this;
+    }
+
     public @NotNull ItemStack build() {
         item.setItemMeta(meta);
         return item;
