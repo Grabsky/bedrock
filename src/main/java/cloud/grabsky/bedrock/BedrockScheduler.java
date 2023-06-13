@@ -60,7 +60,7 @@ public final class BedrockScheduler {
 
     /**
      * Schedules a synchronous task to run repeatedly until iterations / cycles limit {@code (cycles)} is reached.
-     * Returning {@code false} inside the {@link Predicate} {@code (task)} cancells execution of next iteration(s).
+     * Returning {@code false} inside the {@link Predicate} {@code (task)} cancels execution of next iteration(s).
      *
      * @param delay ticks to wait before starting the task
      * @param period ticks to wait in-between tasks
@@ -73,18 +73,19 @@ public final class BedrockScheduler {
             @Override
             public void run() {
                 // Executing the code and cancelling the task if 'false' is returned.
-                if (task.test(cycle) == true)
+                if (task.test(cycle) == false)
                     this.cancel();
                 // Cancelling the task if iterations limit is reached.
                 if (cycle++ > cycles)
                     this.cancel();
             }
+
         }.runTaskTimer(bedrockPlugin, delay, period);
     }
 
     /**
      * Schedules an asynchronous task to run repeatedly until iterations / cycles limit {@code (cycles)} is reached.
-     * Returning {@code false} inside the {@link Predicate} {@code (task)} cancells execution of next iteration(s).
+     * Returning {@code false} inside the {@link Predicate} {@code (task)} cancels execution of next iteration(s).
      *
      * @param delay ticks to wait before starting the task
      * @param period ticks to wait in-between tasks
@@ -97,12 +98,13 @@ public final class BedrockScheduler {
             @Override
             public void run() {
                 // Executing the code and cancelling the task if 'false' is returned.
-                if (task.test(cycle) == true)
+                if (task.test(cycle) == false)
                     this.cancel();
                 // Cancelling the task if iterations limit is reached.
                 if (cycle++ > cycles)
                     this.cancel();
             }
+
         }.runTaskTimerAsynchronously(bedrockPlugin, delay, period);
     }
 
