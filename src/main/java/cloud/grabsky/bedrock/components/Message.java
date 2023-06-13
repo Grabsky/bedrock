@@ -35,16 +35,20 @@ import net.kyori.adventure.text.TextReplacementConfig;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import net.kyori.adventure.title.Title;
+import net.kyori.adventure.title.TitlePart;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus.Experimental;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.function.Predicate;
 
 import static java.lang.String.valueOf;
+import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.minimessage.tag.resolver.Placeholder.component;
 import static net.kyori.adventure.text.minimessage.tag.resolver.Placeholder.unparsed;
 
@@ -149,10 +153,52 @@ public abstract sealed class Message<T> implements Sendable permits Message.Stri
             // Parsing using MiniMessage instance provided by GlobalComponentSerializer.
             final Component component = GlobalComponentSerializer.get().deserialize(message, resolverBuilder.build());
             // Ignoring empty/blank messages.
-            if (Component.empty().equals(component) == true)
+            if (empty().equals(component) == true)
                 return;
             // Sending message to the provided audience.
             audience.sendMessage(component);
+        }
+
+        @Override
+        public void sendTitle(final @NotNull Audience audience, final long fadeIn, final long duration, final long fadeOut) {
+            // Ignoring empty/blank messages.
+            if (message == null || ("").equals(message) == true)
+                return;
+            // Parsing using MiniMessage instance provided by GlobalComponentSerializer.
+            final Component component = GlobalComponentSerializer.get().deserialize(message, resolverBuilder.build());
+            // Ignoring empty/blank messages.
+            if (empty().equals(component) == true)
+                return;
+            // Sending message to the provided audience.
+            audience.showTitle(Title.title(component, empty(), Title.Times.times(Duration.ofMillis(fadeIn), Duration.ofMillis(duration), Duration.ofMillis(fadeOut))));
+        }
+
+        @Override
+        public void sendSubtitle(final @NotNull Audience audience, final long fadeIn, final long duration, final long fadeOut) {
+            // Ignoring empty/blank messages.
+            if (message == null || ("").equals(message) == true)
+                return;
+            // Parsing using MiniMessage instance provided by GlobalComponentSerializer.
+            final Component component = GlobalComponentSerializer.get().deserialize(message, resolverBuilder.build());
+            // Ignoring empty/blank messages.
+            if (empty().equals(component) == true)
+                return;
+            // Sending message to the provided audience.
+            audience.showTitle(Title.title(empty(), component, Title.Times.times(Duration.ofMillis(fadeIn), Duration.ofMillis(duration), Duration.ofMillis(fadeOut))));
+        }
+
+        @Override
+        public void sendActionBar(final @NotNull Audience audience) {
+            // Ignoring empty/blank messages.
+            if (message == null || ("").equals(message) == true)
+                return;
+            // Parsing using MiniMessage instance provided by GlobalComponentSerializer.
+            final Component component = GlobalComponentSerializer.get().deserialize(message, resolverBuilder.build());
+            // Ignoring empty/blank messages.
+            if (empty().equals(component) == true)
+                return;
+            // Sending message to the provided audience.
+            audience.sendActionBar(component);
         }
 
         @Override
@@ -168,7 +214,7 @@ public abstract sealed class Message<T> implements Sendable permits Message.Stri
             // Parsing using MiniMessage instance provided by GlobalComponentSerializer.
             final Component component = GlobalComponentSerializer.get().deserialize(message, resolverBuilder.build());
             // Ignoring empty/blank messages.
-            if (Component.empty().equals(component) == true)
+            if (empty().equals(component) == true)
                 return;
             // Broadcasting message to the players.
             for (final Player player : players)
@@ -183,7 +229,7 @@ public abstract sealed class Message<T> implements Sendable permits Message.Stri
             // Parsing using MiniMessage instance provided by GlobalComponentSerializer.
             final Component component = GlobalComponentSerializer.get().deserialize(message, resolverBuilder.build());
             // Ignoring empty/blank messages.
-            if (Component.empty().equals(component) == true)
+            if (empty().equals(component) == true)
                 return;
             // Broadcasting message to the server.
             Bukkit.broadcast(component);
@@ -219,16 +265,43 @@ public abstract sealed class Message<T> implements Sendable permits Message.Stri
         @Override
         public void send(final @NotNull Audience audience) {
             // Ignoring empty/blank messages.
-            if (message == null || Component.empty().equals(message) == true)
+            if (message == null || empty().equals(message) == true)
                 return;
             // Sending message to the provided audience.
             audience.sendMessage(message);
         }
 
         @Override
+        public void sendTitle(final @NotNull Audience audience, final long fadeIn, final long duration, final long fadeOut) {
+            // Ignoring empty/blank messages.
+            if (message == null || empty().equals(message) == true)
+                return;
+            // Sending message to the provided audience.
+            audience.showTitle(Title.title(message, empty(), Title.Times.times(Duration.ofMillis(fadeIn), Duration.ofMillis(duration), Duration.ofMillis(fadeOut))));
+        }
+
+        @Override
+        public void sendSubtitle(final @NotNull Audience audience, final long fadeIn, final long duration, final long fadeOut) {
+            // Ignoring empty/blank messages.
+            if (message == null || empty().equals(message) == true)
+                return;
+            // Sending message to the provided audience.
+            audience.showTitle(Title.title(empty(), message, Title.Times.times(Duration.ofMillis(fadeIn), Duration.ofMillis(duration), Duration.ofMillis(fadeOut))));
+        }
+
+        @Override
+        public void sendActionBar(final @NotNull Audience audience) {
+            // Ignoring empty/blank messages.
+            if (message == null || empty().equals(message) == true)
+                return;
+            // Sending message to the provided audience.
+            audience.sendActionBar(message);
+        }
+
+        @Override
         public void broadcast(final @NotNull Predicate<Player> predicate) {
             // Ignoring empty/blank messages.
-            if (message == null || Component.empty().equals(message)== true)
+            if (message == null || empty().equals(message)== true)
                 return;
             // Collecting a list of players that matches provided predicate.
             final List<? extends Player> players = Bukkit.getOnlinePlayers().stream().filter(predicate).toList();
@@ -243,7 +316,7 @@ public abstract sealed class Message<T> implements Sendable permits Message.Stri
         @Override
         public void broadcast() {
             // Ignoring empty/blank messages.
-            if (message == null || Component.empty().equals(message) == true)
+            if (message == null || empty().equals(message) == true)
                 return;
             // Broadcasting message to the server.
             Bukkit.broadcast(message);

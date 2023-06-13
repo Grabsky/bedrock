@@ -38,6 +38,21 @@ public interface Sendable {
     void send(final @NotNull Audience audience);
 
     /**
+     * Sends message contained by (this) {@link Message} instance to provided {@link Audience}.
+     */
+    void sendTitle(final @NotNull Audience audience, final long fadeIn, final long duration, final long fadeOut);
+
+    /**
+     * Sends message contained by (this) {@link Message} instance to provided {@link Audience}.
+     */
+    void sendSubtitle(final @NotNull Audience audience, final long fadeIn, final long duration, final long fadeOut);
+
+    /**
+     * Sends message contained by (this) {@link Message} instance to provided {@link Audience}.
+     */
+    void sendActionBar(final @NotNull Audience audience);
+
+    /**
      * Sends message contained by (this) {@link Message} instance to all players matching provided {@link Predicate}.
      */
     void broadcast(final @NotNull Predicate<Player> predicate);
