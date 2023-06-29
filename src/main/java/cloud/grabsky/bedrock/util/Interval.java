@@ -81,7 +81,7 @@ public final class Interval {
     }
 
     /**
-     * Returns new {@link Instant} created from (this) {@link Instant}.
+     * Returns new {@link Instant} created from (this) {@link Interval}.
      */
     public @NotNull Instant toInstant() {
         return Instant.ofEpochMilli(this.interval);
