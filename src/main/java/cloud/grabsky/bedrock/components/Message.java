@@ -49,6 +49,7 @@ import java.util.function.Predicate;
 
 import static java.lang.String.valueOf;
 import static net.kyori.adventure.text.Component.empty;
+import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
 import static net.kyori.adventure.text.minimessage.tag.resolver.Placeholder.component;
 import static net.kyori.adventure.text.minimessage.tag.resolver.Placeholder.unparsed;
 
@@ -143,6 +144,22 @@ public abstract sealed class Message<T> implements Sendable permits Message.Stri
         public @NotNull StringMessage resolvers(final @NotNull TagResolver... resolvers) {
             resolverBuilder.resolvers(resolvers);
             return this;
+        }
+
+        /**
+         * Parses (this) {@link String} message to {@link Component} using serializer provided by {@link GlobalComponentSerializer}.
+         */
+        public @Nullable Component parse() {
+            // Returning null for null or empty messages
+            if (message == null || ("").equals(message) == true)
+                return null;
+            // ...
+            final Component component = GlobalComponentSerializer.get().deserialize(message, resolverBuilder.build());
+            // Ignoring empty/blank messages.
+            if (empty().equals(component) == true)
+                return component;
+            // ...
+            return null;
         }
 
         @Override
