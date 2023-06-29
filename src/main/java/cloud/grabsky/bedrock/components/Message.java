@@ -157,9 +157,9 @@ public abstract sealed class Message<T> implements Sendable permits Message.Stri
             final Component component = GlobalComponentSerializer.get().deserialize(message, resolverBuilder.build());
             // Ignoring empty/blank messages.
             if (empty().equals(component) == true)
-                return component;
+                return null;
             // ...
-            return null;
+            return component;
         }
 
         @Override
