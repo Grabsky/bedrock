@@ -28,6 +28,9 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
+import java.time.Instant;
+import java.util.Date;
+
 /**
  * {@link Interval} is simple (but not very extensible) object that provides methods for
  * unit conversion and creation of human-readable 'elapsed time' strings.
@@ -61,6 +64,27 @@ public final class Interval {
      */
     public float as(final @NotNull Unit unit) {
         return (float) (interval / unit.factor);
+    }
+
+    /**
+     * Returns a copy of (this) {@link Interval} with {@code n} of {@link Unit} added.
+     */
+    public @NotNull Interval and(final long n, final @NotNull Unit unit) {
+        return new Interval(this.interval + (n * unit.factor));
+    }
+
+    /**
+     * Returns new {@link Date} created from (this) {@link Interval}.
+     */
+    public @NotNull Date toDate() {
+        return new Date(this.interval);
+    }
+
+    /**
+     * Returns new {@link Instant} created from (this) {@link Instant}.
+     */
+    public @NotNull Instant toInstant() {
+        return Instant.ofEpochMilli(this.interval);
     }
 
     /**
