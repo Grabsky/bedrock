@@ -62,8 +62,8 @@ public final class Interval {
      * Interval.of(300, Interval.Unit.SECONDS).as(Interval.Unit.MINUTES) // 5F
      * </pre>
      */
-    public float as(final @NotNull Unit unit) {
-        return (float) (interval / unit.factor);
+    public double as(final @NotNull Unit unit) {
+        return (double) (interval / unit.factor);
     }
 
     /**
@@ -122,10 +122,10 @@ public final class Interval {
     public enum Unit {
         MILLISECONDS(1L),
         TICKS(50L),
-        SECONDS(1000L),
-        MINUTES(60000L),
-        HOURS(3600000L),
-        DAYS(86400000L);
+        SECONDS(1_000L),
+        MINUTES(60_000L),
+        HOURS(3_600_000L),
+        DAYS(86_400_000L);
 
         @Getter(AccessLevel.PUBLIC)
         private final long factor;
