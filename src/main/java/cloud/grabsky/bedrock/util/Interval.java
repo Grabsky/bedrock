@@ -41,6 +41,13 @@ public final class Interval {
     private final long interval;
 
     /**
+     * Returns {@link Interval} object of current time.
+     */
+    public static @NotNull Interval now() {
+        return new Interval(System.currentTimeMillis());
+    }
+
+    /**
      * Returns {@link Interval} object constructed from provided {@link Float float} {@code (interval)}.
      * It is expected that provided value is <u>already</u> a difference between two timestamps.
      */
