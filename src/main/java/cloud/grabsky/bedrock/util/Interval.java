@@ -31,6 +31,8 @@ import org.jetbrains.annotations.NotNull;
 import java.time.Instant;
 import java.util.Date;
 
+import static cloud.grabsky.bedrock.util.Interval.Unit.*;
+
 /**
  * {@link Interval} is simple (but not very extensible) object that provides methods for
  * unit conversion and creation of human-readable 'elapsed time' strings.
@@ -103,25 +105,28 @@ public final class Interval {
      */
     @Override
     public @NotNull String toString() {
-        // returning 0s for values below 1000 (ms)
+        // Returning 0s for values below 1000. (less than one second)
         if (interval < 1000) return "0s";
-        // calculating some values (the ugly way)
-        final long totalSeconds = interval / 1000;
-        final long days = totalSeconds / 86400;
-        final long hours = totalSeconds % 86400 / 3600;
-        final long minutes = totalSeconds % 86400 % 3600 / 60;
-        final long seconds = totalSeconds % 86400 % 3600 % 60;
-        // working on the output
+        // Calculation values, the ugly way.
+        final long years = interval / YEARS.getFactor();
+        final long months = interval % YEARS.getFactor() / MONTHS.getFactor();
+        final long days = interval % YEARS.getFactor() % MONTHS.getFactor() / DAYS.getFactor();
+        final long hours = interval % YEARS.getFactor() % MONTHS.getFactor() % DAYS.getFactor() / HOURS.getFactor();
+        final long minutes = interval % YEARS.getFactor() % MONTHS.getFactor() % DAYS.getFactor() % HOURS.getFactor() / MINUTES.getFactor();
+        final long seconds = interval % YEARS.getFactor() % MONTHS.getFactor() % DAYS.getFactor() % HOURS.getFactor() % MINUTES.getFactor();
+        // Creating a new output StringBuilder object.
         final StringBuilder builder = new StringBuilder();
-        // appending to the output
+        // Appending to the StringBuilder.
+        if (years > 0L) builder.append(years).append("y ");
+        if (months > 0L) builder.append(months).append("m ");
         if (days > 0L) builder.append(days).append("d ");
         if (hours > 0L) builder.append(hours).append("h ");
         if (minutes > 0L) builder.append(minutes).append("min ");
         if (seconds > 0L) builder.append(seconds).append("s");
-        // removing whitespace if present
+        // Removing last character if a whitespace.
         if (builder.charAt(builder.length() - 1) == ' ')
             builder.deleteCharAt(builder.length() - 1);
-        // returning
+        // Building a String and returning.
         return builder.toString();
     }
 
@@ -132,7 +137,9 @@ public final class Interval {
         SECONDS(1_000L),
         MINUTES(60_000L),
         HOURS(3_600_000L),
-        DAYS(86_400_000L);
+        DAYS(86_400_000L),
+        MONTHS(2_629_800_000L),
+        YEARS(31_557_600_000L);
 
         @Getter(AccessLevel.PUBLIC)
         private final long factor;
