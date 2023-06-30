@@ -99,18 +99,14 @@ public final class Interval {
         // returning 0s for values below 1000 (ms)
         if (interval < 1000) return "0s";
         // calculating some values (the ugly way)
-        final long totalSeconds = interval / 1_000;
-        final long years = totalSeconds / 31_557_600;
-        final long months = totalSeconds % 31_557_600 / 2_629_800;
-        final long days = totalSeconds % 31_557_600 % 2_629_800 / 86_400;
-        final long hours = totalSeconds % 31_557_600 % 2_629_800 % 86_400 / 3_600;
-        final long minutes = totalSeconds % 31_557_600 % 2_629_800 % 86_400 % 3_600 / 60;
-        final long seconds = totalSeconds % 31_557_600 % 2_629_800 % 86_400 % 3_600 % 60;
+        final long totalSeconds = interval / 1000;
+        final long days = totalSeconds / 86400;
+        final long hours = totalSeconds % 86400 / 3600;
+        final long minutes = totalSeconds % 86400 % 3600 / 60;
+        final long seconds = totalSeconds % 86400 % 3600 % 60;
         // working on the output
         final StringBuilder builder = new StringBuilder();
         // appending to the output
-        if (years > 0L) builder.append(years).append("y ");
-        if (months > 0L) builder.append(months).append("m ");
         if (days > 0L) builder.append(days).append("d ");
         if (hours > 0L) builder.append(hours).append("h ");
         if (minutes > 0L) builder.append(minutes).append("min ");
