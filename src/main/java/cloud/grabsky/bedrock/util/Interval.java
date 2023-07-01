@@ -27,6 +27,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Range;
 
 import java.time.Instant;
 import java.util.Date;
@@ -40,7 +41,7 @@ import static cloud.grabsky.bedrock.util.Interval.Unit.*;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Interval {
 
-    private final long interval;
+    private final long value;
 
     /**
      * Returns {@link Interval} object of current time.
@@ -72,28 +73,49 @@ public final class Interval {
      * </pre>
      */
     public double as(final @NotNull Unit unit) {
-        return (double) (interval / unit.factor);
+        return (double) (value / unit.factor);
     }
 
     /**
      * Returns a copy of (this) {@link Interval} with {@code n} of {@link Unit} added.
      */
-    public @NotNull Interval and(final long n, final @NotNull Unit unit) {
-        return new Interval(this.interval + (n * unit.factor));
+    public @NotNull Interval add(final @NotNull Interval other) {
+        return new Interval(this.value + other.value);
+    }
+
+    /**
+     * Returns a copy of (this) {@link Interval} with {@code n} of {@link Unit} added.
+     */
+    public @NotNull Interval add(final long n, final @NotNull Unit unit) {
+        return new Interval(this.value + (n * unit.factor));
+    }
+
+    /**
+     * Returns a copy of (this) {@link Interval} with {@code n} of {@link Unit} removed.
+     */
+    public @NotNull Interval remove(final @NotNull Interval other) {
+        return new Interval(this.value - other.value);
+    }
+
+    /**
+     * Returns a copy of (this) {@link Interval} with {@code n} of {@link Unit} removed.
+     */
+    public @NotNull Interval remove(final long n, final @NotNull Unit unit) {
+        return new Interval(this.value - (n * unit.factor));
     }
 
     /**
      * Returns new {@link Date} created from (this) {@link Interval}.
      */
     public @NotNull Date toDate() {
-        return new Date(this.interval);
+        return new Date(this.value);
     }
 
     /**
      * Returns new {@link Instant} created from (this) {@link Interval}.
      */
     public @NotNull Instant toInstant() {
-        return Instant.ofEpochMilli(this.interval);
+        return Instant.ofEpochMilli(this.value);
     }
 
     /**
@@ -106,14 +128,14 @@ public final class Interval {
     @Override
     public @NotNull String toString() {
         // Returning 0s for values below 1000. (less than one second)
-        if (interval < 1000) return "0s";
+        if (value < 1000) return "0s";
         // Calculation values, the ugly way.
-        final long years = interval / YEARS.getFactor();
-        final long months = interval % YEARS.getFactor() / MONTHS.getFactor();
-        final long days = interval % YEARS.getFactor() % MONTHS.getFactor() / DAYS.getFactor();
-        final long hours = interval % YEARS.getFactor() % MONTHS.getFactor() % DAYS.getFactor() / HOURS.getFactor();
-        final long minutes = interval % YEARS.getFactor() % MONTHS.getFactor() % DAYS.getFactor() % HOURS.getFactor() / MINUTES.getFactor();
-        final long seconds = interval % YEARS.getFactor() % MONTHS.getFactor() % DAYS.getFactor() % HOURS.getFactor() % MINUTES.getFactor();
+        final long years = value / YEARS.getFactor();
+        final long months = value % YEARS.getFactor() / MONTHS.getFactor();
+        final long days = value % YEARS.getFactor() % MONTHS.getFactor() / DAYS.getFactor();
+        final long hours = value % YEARS.getFactor() % MONTHS.getFactor() % DAYS.getFactor() / HOURS.getFactor();
+        final long minutes = value % YEARS.getFactor() % MONTHS.getFactor() % DAYS.getFactor() % HOURS.getFactor() / MINUTES.getFactor();
+        final long seconds = value % YEARS.getFactor() % MONTHS.getFactor() % DAYS.getFactor() % HOURS.getFactor() % MINUTES.getFactor() / SECONDS.getFactor();
         // Creating a new output StringBuilder object.
         final StringBuilder builder = new StringBuilder();
         // Appending to the StringBuilder.
