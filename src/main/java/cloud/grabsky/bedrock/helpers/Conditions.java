@@ -56,4 +56,11 @@ public final class Conditions {
         return num >= rangeFrom && num <= rangeTo;
     }
 
+    /**
+     * Returns {@code true} if {@code num} is in range between {@code rangeFrom} and {@code rangeTo}.
+     */
+    public static boolean inRange(final long num, final long rangeFrom, final long rangeTo) {
+        return num >= rangeFrom && num <= rangeTo;
+    }
+
 }
