@@ -35,7 +35,7 @@ import org.jetbrains.annotations.NotNull;
 public final class Inventories {
 
     /**
-     * Returns {@code true} if both items are similar, compared by type, display name and lore.
+     * Returns {@code true} if both items are similar, compared by type, display name, lore and custom model data.
      */
     public static boolean isSimilar(final @NotNull ItemStack first, final @NotNull ItemStack second) {
         final ItemMeta metaFirst = first.getItemMeta();
@@ -46,8 +46,11 @@ public final class Inventories {
         // Comparing display names...
         if (metaFirst.hasDisplayName() == true && metaSecond.hasDisplayName() == true && metaFirst.displayName().equals(metaSecond.displayName()) == false)
             return false;
-        // Comparing lores...
+        // Comparing lore...
         if (metaFirst.hasLore() == true && metaSecond.hasLore() == true && metaFirst.lore().equals(metaSecond.lore()) == false)
+            return false;
+        // Comparing custom model data...
+        if (metaFirst.hasCustomModelData() == true && metaSecond.hasCustomModelData() == true && metaFirst.getCustomModelData() != metaSecond.getCustomModelData())
             return false;
         // ...
         return true;
