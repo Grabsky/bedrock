@@ -30,13 +30,17 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.ApiStatus.Experimental;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Inventories {
 
     /**
      * Returns {@code true} if both items are similar, compared by type, display name, lore and custom model data.
+     *
+     * @apiNote This is all kind of messed up and may not work properly. To be fixed in the future, once Paper Item Property API is merged.
      */
+    @Deprecated @Experimental
     public static boolean isSimilar(final @NotNull ItemStack first, final @NotNull ItemStack second) {
         final ItemMeta metaFirst = first.getItemMeta();
         final ItemMeta metaSecond = second.getItemMeta();
@@ -56,7 +60,12 @@ public final class Inventories {
         return true;
     }
 
-    @Experimental
+    /**
+     * Removes similar items from {@link Player}'s inventory. Based on {@link Inventories#isSimilar} check.
+     *
+     * @apiNote This is all kind of messed up and may not work properly. To be fixed in the future, once Paper Item Property API is merged.
+     */
+    @Deprecated @Experimental
     public static void removeSimilarItems(final @NotNull Player player, final @NotNull ItemStack... items) {
         final int[] leftToRemove = new int[items.length];
         // Preparing list of items to remove
@@ -76,7 +85,12 @@ public final class Inventories {
         }
     }
 
-    @Experimental
+    /**
+     * Returns true if {@link Player}'s inventory contains specified items. Based on {@link Inventories#isSimilar} check.
+     *
+     * @apiNote This is all kind of messed up and may not work properly. To be fixed in the future, once Paper Item Property API is merged.
+     */
+    @Deprecated @Experimental
     public static boolean hasSimilarItems(final @NotNull Player player, final @NotNull ItemStack... items) {
         final int[] conditions = new int[items.length];
         for (final ItemStack inventoryItem : player.getInventory().getStorageContents()) {

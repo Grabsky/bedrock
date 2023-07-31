@@ -3,6 +3,8 @@
 [![](https://www.codefactor.io/repository/github/grabsky/bedrock/badge/main)](https://www.codefactor.io/repository/github/grabsky/bedrock/overview/main)  
 Multi-purpose library aiming to make development of **[PaperMC/Paper](https://github.com/PaperMC/Paper)** plugins faster.
 
+<br />
+
 > **Warning**  
 > Breaking changes are likely to happen before a stable release.
 
