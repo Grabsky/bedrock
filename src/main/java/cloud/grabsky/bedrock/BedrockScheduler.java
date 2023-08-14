@@ -23,15 +23,16 @@
  */
 package cloud.grabsky.bedrock;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor(access = AccessLevel.PACKAGE)
 public final class BedrockScheduler {
@@ -66,8 +67,8 @@ public final class BedrockScheduler {
      * @param period ticks to wait in-between tasks
      * @param cycles max iterations
      */
-    public void repeat(final long delay, final long period, final long cycles, final @NotNull Predicate<Integer> task) {
-        new BukkitRunnable() {
+    public @NotNull BukkitTask repeat(final long delay, final long period, final long cycles, final @NotNull Predicate<Integer> task) {
+        return new BukkitRunnable() {
             int cycle = 1;
 
             @Override
@@ -91,8 +92,8 @@ public final class BedrockScheduler {
      * @param period ticks to wait in-between tasks
      * @param cycles max iterations
      */
-    public void repeatAsync(final long delay, final long period, final long cycles, final @NotNull Predicate<Integer> task) {
-        new BukkitRunnable() {
+    public @NotNull BukkitTask repeatAsync(final long delay, final long period, final long cycles, final @NotNull Predicate<Integer> task) {
+        return new BukkitRunnable() {
             int cycle = 1;
 
             @Override
