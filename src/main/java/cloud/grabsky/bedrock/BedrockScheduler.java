@@ -87,7 +87,7 @@ public final class BedrockScheduler {
 
     /**
      * Schedules a synchronous task to run repeatedly until iterations / cycles limit {@code (cycles)} is reached.
-     * Returning {@code false} inside the {@link Predicate} {@code (task)} cancels execution of next iteration(s).
+     * Returning {@code false} inside the {@link BiPredicate} {@code (task)} cancels execution of next iteration(s).
      *
      * @param delay ticks to wait before starting the task
      * @param period ticks to wait in-between tasks
@@ -137,7 +137,7 @@ public final class BedrockScheduler {
 
     /**
      * Schedules an asynchronous task to run repeatedly until iterations / cycles limit {@code (cycles)} is reached.
-     * Returning {@code false} inside the {@link Predicate} {@code (task)} cancels execution of next iteration(s).
+     * Returning {@code false} inside the {@link BiPredicate} {@code (task)} cancels execution of next iteration(s).
      *
      * @param delay ticks to wait before starting the task
      * @param period ticks to wait in-between tasks
