@@ -27,6 +27,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -85,6 +86,31 @@ public final class BedrockScheduler {
     }
 
     /**
+     * Schedules a synchronous task to run repeatedly until iterations / cycles limit {@code (cycles)} is reached.
+     * Returning {@code false} inside the {@link Predicate} {@code (task)} cancels execution of next iteration(s).
+     *
+     * @param delay ticks to wait before starting the task
+     * @param period ticks to wait in-between tasks
+     * @param cycles max iterations
+     */
+    public @NotNull BukkitTask repeat(final long delay, final long period, final long cycles, final @NotNull BiPredicate<BukkitRunnable, Integer> task) {
+        return new BukkitRunnable() {
+            int cycle = 1;
+
+            @Override
+            public void run() {
+                // Executing the code and cancelling the task if 'false' is returned.
+                if (task.test(this, cycle) == false)
+                    this.cancel();
+                // Cancelling the task if iterations limit is reached.
+                if (cycle++ > cycles)
+                    this.cancel();
+            }
+
+        }.runTaskTimer(bedrockPlugin, delay, period);
+    }
+
+    /**
      * Schedules an asynchronous task to run repeatedly until iterations / cycles limit {@code (cycles)} is reached.
      * Returning {@code false} inside the {@link Predicate} {@code (task)} cancels execution of next iteration(s).
      *
@@ -100,6 +126,31 @@ public final class BedrockScheduler {
             public void run() {
                 // Executing the code and cancelling the task if 'false' is returned.
                 if (task.test(cycle) == false)
+                    this.cancel();
+                // Cancelling the task if iterations limit is reached.
+                if (cycle++ > cycles)
+                    this.cancel();
+            }
+
+        }.runTaskTimerAsynchronously(bedrockPlugin, delay, period);
+    }
+
+    /**
+     * Schedules an asynchronous task to run repeatedly until iterations / cycles limit {@code (cycles)} is reached.
+     * Returning {@code false} inside the {@link Predicate} {@code (task)} cancels execution of next iteration(s).
+     *
+     * @param delay ticks to wait before starting the task
+     * @param period ticks to wait in-between tasks
+     * @param cycles max iterations
+     */
+    public @NotNull BukkitTask repeatAsync(final long delay, final long period, final long cycles, final @NotNull BiPredicate<BukkitRunnable, Integer> task) {
+        return new BukkitRunnable() {
+            int cycle = 1;
+
+            @Override
+            public void run() {
+                // Executing the code and cancelling the task if 'false' is returned.
+                if (task.test(this, cycle) == false)
                     this.cancel();
                 // Cancelling the task if iterations limit is reached.
                 if (cycle++ > cycles)

@@ -58,5 +58,6 @@ dependencies {
 }
 
 gradle.buildFinished {
+    println()
     println("> " + hash7)
 }
