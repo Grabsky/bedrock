@@ -47,4 +47,11 @@ public abstract class BedrockPlugin extends JavaPlugin {
      */
     public abstract boolean onReload();
 
+    /**
+     * Returns {@code true} if {@code BEDROCK_DEBUGGING} environment variable is set to {@code 1}.
+     */
+    public boolean isDebugEnabled() {
+        return "1".equalsIgnoreCase(System.getenv("BEDROCK_DEBUGGING"));
+    }
+
 }
