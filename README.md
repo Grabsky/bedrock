@@ -11,7 +11,7 @@ Multi-purpose library aiming to make development of **[PaperMC/Paper](https://gi
 <br />
 
 ## Requirements
-Requires **Java 17** (or higher) and **Paper 1.19.4** (or higher).
+Requires **Java 17** (or higher) and **Paper 1.20.1* (or higher).
 
 <br />
 
