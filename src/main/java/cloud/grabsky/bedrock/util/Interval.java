@@ -23,16 +23,22 @@
  */
 package cloud.grabsky.bedrock.util;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Range;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.Instant;
 import java.util.Date;
 
-import static cloud.grabsky.bedrock.util.Interval.Unit.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+import static cloud.grabsky.bedrock.util.Interval.Unit.DAYS;
+import static cloud.grabsky.bedrock.util.Interval.Unit.HOURS;
+import static cloud.grabsky.bedrock.util.Interval.Unit.MINUTES;
+import static cloud.grabsky.bedrock.util.Interval.Unit.MONTHS;
+import static cloud.grabsky.bedrock.util.Interval.Unit.SECONDS;
+import static cloud.grabsky.bedrock.util.Interval.Unit.YEARS;
 
 /**
  * {@link Interval} is simple (but not very extensible) object that provides methods for
@@ -154,17 +160,30 @@ public final class Interval {
 
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     public enum Unit {
-        MILLISECONDS(1L),
-        TICKS(50L),
-        SECONDS(1_000L),
-        MINUTES(60_000L),
-        HOURS(3_600_000L),
-        DAYS(86_400_000L),
-        MONTHS(2_629_800_000L),
-        YEARS(31_557_600_000L);
+        MILLISECONDS(1L, "ms"),
+        TICKS(50L, "t"),
+        SECONDS(1_000L, "s"),
+        MINUTES(60_000L, "min"),
+        HOURS(3_600_000L, "h"),
+        DAYS(86_400_000L, "d"),
+        MONTHS(2_629_800_000L, "mo"),
+        YEARS(31_557_600_000L, "y");
 
         @Getter(AccessLevel.PUBLIC)
         private final long factor;
+
+        @Getter(AccessLevel.PUBLIC)
+        private final String shortCode;
+
+        /** Returns {@link Unit} or {@code null} from provided short code. */
+        public static @Nullable Unit fromShortCode(final @NotNull String shortCode) {
+            // Iterating over all units and finding one that matches provided short code.
+            for (final Unit unit : Unit.values())
+                if (unit.shortCode.equalsIgnoreCase(shortCode) == true)
+                    return unit;
+            // Unit has not been found. Returning null.
+            return null;
+        }
 
     }
 
