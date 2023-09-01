@@ -151,7 +151,7 @@ public abstract sealed class Message<T> implements Sendable permits Message.Stri
          */
         public @Nullable Component parse() {
             // Returning null for null or empty messages
-            if (message == null || ("").equals(message) == true)
+            if (message == null || message.isEmpty() == true)
                 return null;
             // ...
             final Component component = GlobalComponentSerializer.get().deserialize(message, resolverBuilder.build());
@@ -165,7 +165,7 @@ public abstract sealed class Message<T> implements Sendable permits Message.Stri
         @Override
         public void send(final @NotNull Audience audience) {
             // Ignoring empty/blank messages.
-            if (message == null || ("").equals(message) == true)
+            if (message == null || message.isEmpty() == true)
                 return;
             // Parsing using MiniMessage instance provided by GlobalComponentSerializer.
             final Component component = GlobalComponentSerializer.get().deserialize(message, resolverBuilder.build());
@@ -179,7 +179,7 @@ public abstract sealed class Message<T> implements Sendable permits Message.Stri
         @Override
         public void sendTitle(final @NotNull Audience audience, final long fadeIn, final long duration, final long fadeOut) {
             // Ignoring empty/blank messages.
-            if (message == null || ("").equals(message) == true)
+            if (message == null || message.isEmpty() == true)
                 return;
             // Parsing using MiniMessage instance provided by GlobalComponentSerializer.
             final Component component = GlobalComponentSerializer.get().deserialize(message, resolverBuilder.build());
@@ -193,7 +193,7 @@ public abstract sealed class Message<T> implements Sendable permits Message.Stri
         @Override
         public void sendSubtitle(final @NotNull Audience audience, final long fadeIn, final long duration, final long fadeOut) {
             // Ignoring empty/blank messages.
-            if (message == null || ("").equals(message) == true)
+            if (message == null || message.isEmpty() == true)
                 return;
             // Parsing using MiniMessage instance provided by GlobalComponentSerializer.
             final Component component = GlobalComponentSerializer.get().deserialize(message, resolverBuilder.build());
@@ -221,7 +221,7 @@ public abstract sealed class Message<T> implements Sendable permits Message.Stri
         @Override
         public void broadcast(final @NotNull Predicate<Player> predicate) {
             // Ignoring empty/blank messages.
-            if (message == null || ("").equals(message) == true)
+            if (message == null || message.isEmpty() == true)
                 return;
             // Collecting a list of players that matches provided predicate.
             final List<? extends Player> players = Bukkit.getOnlinePlayers().stream().filter(predicate).toList();
@@ -241,7 +241,7 @@ public abstract sealed class Message<T> implements Sendable permits Message.Stri
         @Override
         public void broadcast() {
             // Ignoring empty/blank messages.
-            if (message == null || ("").equals(message) == true)
+            if (message == null || message.isEmpty() == true)
                 return;
             // Parsing using MiniMessage instance provided by GlobalComponentSerializer.
             final Component component = GlobalComponentSerializer.get().deserialize(message, resolverBuilder.build());
@@ -323,7 +323,7 @@ public abstract sealed class Message<T> implements Sendable permits Message.Stri
             // Collecting a list of players that matches provided predicate.
             final List<? extends Player> players = Bukkit.getOnlinePlayers().stream().filter(predicate).toList();
             // Ignoring in case list is empty.
-            if (players.size() == 0)
+            if (players.isEmpty() == true)
                 return;
             // Broadcasting message to the players.
             for (final Player player : players)
