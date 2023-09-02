@@ -57,6 +57,7 @@ dependencies {
     compileOnly "io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT"
 }
 
+// Usage of @Deprecated methods will be replaced once similar API is introduced in the future.
 gradle.buildFinished {
     println()
     println("> " + hash7)

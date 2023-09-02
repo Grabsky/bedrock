@@ -25,8 +25,6 @@ package cloud.grabsky.bedrock.helpers;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
-import lombok.AccessLevel;
-import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -45,6 +43,9 @@ import org.jetbrains.annotations.Range;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
+
+import lombok.AccessLevel;
+import lombok.Getter;
 
 import static cloud.grabsky.bedrock.util.Iterables.merge;
 import static cloud.grabsky.bedrock.util.Iterables.toList;
@@ -116,6 +117,14 @@ public final class ItemBuilder {
 
     public @NotNull ItemBuilder addEnchantment(final @NotNull Enchantment enchantment, final int level) {
         meta.addEnchant(enchantment, level, true);
+        return this;
+    }
+
+    public @NotNull ItemBuilder setSkullTexture(final @NotNull PlayerProfile profile) {
+        if (meta instanceof SkullMeta skullMeta) {
+            // Updating PlayerProfile inside the SkullMeta (casted ItemMeta)
+            skullMeta.setPlayerProfile(profile);
+        }
         return this;
     }
 
