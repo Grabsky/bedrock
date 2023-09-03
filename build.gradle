@@ -19,6 +19,13 @@ publishing {
                 password = System.getenv("REPO_SECRET")
             }
         }
+        maven {
+            url = "https://maven.pkg.github.com/Grabsky/bedrock"
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
     }
     publications {
         maven(MavenPublication) { from components.java }

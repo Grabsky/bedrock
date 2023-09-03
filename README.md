@@ -1,7 +1,8 @@
-# grabsky/bedrock
+# bedrock
 <span>
-    <a href="#"><img alt="GitHub Workflow Status (with event)" src="https://img.shields.io/github/actions/workflow/status/Grabsky/bedrock/gradle.yml?style=for-the-badge&logo=github&logoColor=white&label=%20"></a>
-    <a href="#"><img alt="CodeFactor Grade" src="https://img.shields.io/codefactor/grade/github/Grabsky/bedrock/main?style=for-the-badge&logo=codefactor&logoColor=white&label=%20"></a>
+    <a href=""><img alt="Maven metadata URL" src="https://img.shields.io/maven-metadata/v?metadataUrl=https%3A%2F%2Frepo.grabsky.cloud%2Freleases%2Fcloud%2Fgrabsky%2Fbedrock%2Fmaven-metadata.xml&style=for-the-badge&logo=gradle&label=%20"></a>
+    <a href=""><img alt="GitHub Workflow Status (with event)" src="https://img.shields.io/github/actions/workflow/status/Grabsky/bedrock/gradle.yml?style=for-the-badge&logo=github&logoColor=white&label=%20"></a>
+    <a href=""><img alt="CodeFactor Grade" src="https://img.shields.io/codefactor/grade/github/Grabsky/bedrock/main?style=for-the-badge&logo=codefactor&logoColor=white&label=%20"></a>
 </span>
 <p></p>
 
@@ -9,13 +10,8 @@ Multi-purpose library aiming to make development of **[PaperMC/Paper](https://gi
 
 <br />
 
-> **Warning**  
-> Breaking changes are likely to happen before a stable release.
-
-<br />
-
 ## Requirements
-Requires **Java 17** (or higher) and **Paper 1.20.1* (or higher).
+Requires **Java 17** (or higher) and **Paper 1.20.1** (or higher).
 
 <br />
 
@@ -32,7 +28,7 @@ dependencies {
     implementation 'cloud.grabsky:bedrock:[_VERSION_]'
 }
 ```
-Consider **[relocating](https://imperceptiblethoughts.com/shadow/configuration/relocation/)** to prevent version mismatch issues. This can be ignored if your plugin is a **[Paper plugin](https://docs.papermc.io/paper/dev/getting-started/paper-plugins)** with **[isolated classloader](https://docs.papermc.io/paper/dev/getting-started/paper-plugins#classloading-isolation)**.
+You can also use [GitHub Packages](https://github.com/Grabsky/bedrock/packages/) - read more about that [here](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-gradle-registry#using-a-published-package).
 
 <br />
 

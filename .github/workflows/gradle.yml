@@ -6,6 +6,7 @@ on:
 
 permissions:
   contents: read
+  packages: write
 
 jobs:
   build:
@@ -17,10 +18,13 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-      - name: Assemble Publish
+      - name: Publish
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: assemble publish
+          arguments: publish
         env:
+          # GitHub Packages
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Cloud Repository
           REPO_USERNAME: ${{ secrets.REPO_USERNAME }}
           REPO_SECRET: ${{ secrets.REPO_SECRET }}
