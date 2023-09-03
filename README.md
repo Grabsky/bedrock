@@ -1,6 +1,10 @@
 # grabsky/bedrock
-[![](https://github.com/Grabsky/bedrock/actions/workflows/gradle.yml/badge.svg)](https://github.com/Grabsky/bedrock/actions/workflows/gradle.yml)
-[![](https://www.codefactor.io/repository/github/grabsky/bedrock/badge/main)](https://www.codefactor.io/repository/github/grabsky/bedrock/overview/main)  
+<span>
+    <a href="#"><img alt="GitHub Workflow Status (with event)" src="https://img.shields.io/github/actions/workflow/status/Grabsky/bedrock/gradle.yml?style=for-the-badge&logo=github&logoColor=white&label=%20"></a>
+    <a href="#"><img alt="CodeFactor Grade" src="https://img.shields.io/codefactor/grade/github/Grabsky/bedrock/main?style=for-the-badge&logo=codefactor&logoColor=white&label=%20"></a>
+</span>
+<p></p>
+
 Multi-purpose library aiming to make development of **[PaperMC/Paper](https://github.com/PaperMC/Paper)** plugins faster.
 
 <br />
