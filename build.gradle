@@ -4,30 +4,20 @@ plugins {
 }
 
 group = "cloud.grabsky"
-version = "0.9.0-SNAPSHOT"
+version = "1.20.1-${System.getenv("GITHUB_RUN_NUMBER") ?: "dev"}"
 
 sourceCompatibility = JavaVersion.VERSION_17
 targetCompatibility = JavaVersion.VERSION_17
 
-final isSnapshot = version.endsWith("-SNAPSHOT")
-final hash7 = "git rev-parse --verify --short HEAD".execute().text.trim()
-
 publishing {
     repositories {
         maven {
-            url = (isSnapshot == true ? "https://repo.grabsky.cloud/snapshots" : "https://repo.grabsky.cloud/releases")
+            url = "https://repo.grabsky.cloud/releases/"
+            authentication { basic(BasicAuthentication) }
             credentials {
                 username = System.getenv("REPO_USERNAME")
                 password = System.getenv("REPO_SECRET")
             }
-            authentication { basic(BasicAuthentication) }
-        }
-    }
-    publications {
-        maven(MavenPublication) {
-            from components.java
-            artifactId = rootProject.name
-            version = (isSnapshot == true ? hash7 : version)
         }
     }
 }
@@ -60,5 +50,5 @@ dependencies {
 // Usage of @Deprecated methods will be replaced once similar API is introduced in the future.
 gradle.buildFinished {
     println()
-    println("> " + hash7)
+    println("> " + version)
 }
