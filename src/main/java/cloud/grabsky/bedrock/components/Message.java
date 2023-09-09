@@ -24,6 +24,7 @@
 package cloud.grabsky.bedrock.components;
 
 import cloud.grabsky.bedrock.Sendable;
+import io.papermc.paper.math.Position;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
@@ -34,7 +35,10 @@ import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.intellij.lang.annotations.Subst;
 import org.jetbrains.annotations.ApiStatus.Experimental;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -117,11 +121,20 @@ public abstract sealed class Message<T> implements Sendable permits Message.Stri
         }
 
         /**
+         * Creates and adds {@link Placeholder} of <b>{@code name}</b> to be replaced with result of {@link OfflinePlayer#getName Player#getName} or {@link OfflinePlayer#getUniqueId} called on <b>{@code value}</b>.
+         */
+        // TO-DO: Replace with enhanced swtich once it leaves preview.
+        public @NotNull StringMessage placeholder(@Subst("") final @NotNull String name, final @NotNull OfflinePlayer value) {
+            resolverBuilder.resolver(unparsed(name, (value.getName() != null) ? value.getName() : value.getUniqueId().toString()));
+            return this;
+        }
+
+        /**
          * Creates and adds {@link Placeholder} of <b>{@code name}</b> to be replaced with result of {@link Player#getName Player#getName} called on <b>{@code value}</b>.
          */
         // TO-DO: Replace with enhanced swtich once it leaves preview.
-        public @NotNull StringMessage placeholder(final @NotNull String name, final @NotNull Player value) {
-            resolverBuilder.resolver(unparsed(name, value.getName()));
+        public @NotNull StringMessage placeholder(final @NotNull String name, final @NotNull Position value) {
+            resolverBuilder.resolver(unparsed(name, "%.2f, %.2f, %.2f".formatted(value.x(), value.y(), value.z())));
             return this;
         }
 
