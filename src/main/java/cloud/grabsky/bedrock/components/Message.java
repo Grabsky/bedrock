@@ -260,6 +260,8 @@ public abstract sealed class Message<T> implements Sendable permits Message.Stri
             // Ignoring empty/blank messages.
             if (empty().equals(component) == true)
                 return;
+            // Broadcasting message to the console.
+            Bukkit.getConsoleSender().sendMessage(message);
             // Broadcasting message to the server.
             Bukkit.broadcast(component);
         }
@@ -337,6 +339,8 @@ public abstract sealed class Message<T> implements Sendable permits Message.Stri
             // Ignoring in case list is empty.
             if (players.isEmpty() == true)
                 return;
+            // Broadcasting message to the console.
+            Bukkit.getConsoleSender().sendMessage(message);
             // Broadcasting message to the players.
             for (final Player player : players)
                 player.sendMessage(message);
