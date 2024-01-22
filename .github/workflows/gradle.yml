@@ -25,6 +25,3 @@ jobs:
         env:
           # GitHub Packages
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Cloud Repository
-          REPO_USERNAME: ${{ secrets.REPO_USERNAME }}
-          REPO_SECRET: ${{ secrets.REPO_SECRET }}
