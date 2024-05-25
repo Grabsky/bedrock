@@ -6,33 +6,6 @@ plugins {
 group = "cloud.grabsky"
 version = "1.20.1-${System.getenv("GITHUB_RUN_NUMBER") ?: "DEV"}"
 
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
-
-publishing {
-    repositories {
-        maven {
-            url = "https://maven.pkg.github.com/Grabsky/bedrock"
-            credentials {
-                username = System.getenv("GITHUB_ACTOR")
-                password = System.getenv("GITHUB_TOKEN")
-            }
-        }
-    }
-    publications {
-        maven(MavenPublication) { from components.java }
-    }
-}
-
-java {
-    withJavadocJar()
-    withSourcesJar()
-}
-
-javadoc {
-    (options as CoreJavadocOptions).addStringOption("Xdoclint:none", "-quiet")
-}
-
 repositories {
     mavenLocal()
     mavenCentral()
@@ -43,10 +16,40 @@ dependencies {
     // JetBrains Annotations
     compileOnly "org.jetbrains:annotations:24.0.0"
     // Project Lombok
-    compileOnly "org.projectlombok:lombok:1.18.24"
-    annotationProcessor "org.projectlombok:lombok:1.18.24"
+    compileOnly "org.projectlombok:lombok:1.18.32"
+    annotationProcessor "org.projectlombok:lombok:1.18.32"
     // Paper API
     compileOnly "io.papermc.paper:paper-api:1.20.1-R0.1-SNAPSHOT"
+}
+
+publishing {
+    repositories {
+        maven { url = "https://maven.pkg.github.com/Grabsky/bedrock"
+            credentials {
+                username = System.getenv("GITHUB_ACTOR")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
+    publications {
+        register("maven", MavenPublication.class) {
+            from components.java
+        }
+    }
+}
+
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+
+compileJava {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+javadoc {
+    (options as CoreJavadocOptions).addStringOption("Xdoclint:none", "-quiet")
 }
 
 // Usage of @Deprecated methods will be replaced once similar API is introduced in the future.

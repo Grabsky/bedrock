@@ -24,6 +24,7 @@
 package cloud.grabsky.bedrock.components;
 
 import cloud.grabsky.bedrock.Sendable;
+import cloud.grabsky.bedrock.util.Interval;
 import io.papermc.paper.math.Position;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.key.Key;
@@ -85,7 +86,7 @@ public abstract sealed class Message<T> implements Sendable permits Message.Stri
         }
 
         /**
-         * Replaces all occurences of <b>{@code target}</b> with <b>{@code to}</b>.
+         * Replaces all occurrences of <b>{@code target}</b> with <b>{@code to}</b>.
          */
         public @NotNull StringMessage replace(final @NotNull String target, final @NotNull String replacement) {
             if (message == null)
@@ -98,7 +99,7 @@ public abstract sealed class Message<T> implements Sendable permits Message.Stri
         /**
          * Creates and adds {@link Placeholder} of <b>{@code name}</b> to be replaced with <b>{@code value}</b>.
          */
-        public @NotNull StringMessage placeholder(final @NotNull String name, final @NotNull String value) {
+        public @NotNull StringMessage placeholder(final @Subst("") @NotNull String name, final @NotNull String value) {
             resolverBuilder.resolver(unparsed(name, value));
             return this;
         }
@@ -106,47 +107,30 @@ public abstract sealed class Message<T> implements Sendable permits Message.Stri
         /**
          * Creates and adds {@link Placeholder} of <b>{@code name}</b> to be replaced with <b>{@code value}</b>.
          */
-        public @NotNull StringMessage placeholder(final @NotNull String name, final @NotNull Component value) {
+        public @NotNull StringMessage placeholder(final @Subst("") @NotNull String name, final @NotNull Component value) {
             resolverBuilder.resolver(component(name, value));
             return this;
         }
 
         /**
-         * Creates and adds {@link Placeholder} of <b>{@code name}</b> to be replaced with result of {@link Key#asString Key#asString} called on {@link Keyed#key Keyed#key}.
-         */
-        // TO-DO: Replace with enhanced swtich once it leaves preview.
-        public @NotNull StringMessage placeholder(final @NotNull String name, final @NotNull Keyed value) {
-            resolverBuilder.resolver(unparsed(name, value.key().asString()));
-            return this;
-        }
-
-        /**
-         * Creates and adds {@link Placeholder} of <b>{@code name}</b> to be replaced with result of {@link OfflinePlayer#getName Player#getName} or {@link OfflinePlayer#getUniqueId} called on <b>{@code value}</b>.
-         */
-        // TO-DO: Replace with enhanced swtich once it leaves preview.
-        public @NotNull StringMessage placeholder(@Subst("") final @NotNull String name, final @NotNull OfflinePlayer value) {
-            resolverBuilder.resolver(unparsed(name, (value.getName() != null) ? value.getName() : value.getUniqueId().toString()));
-            return this;
-        }
-
-        /**
-         * Creates and adds {@link Placeholder} of <b>{@code name}</b> to be replaced with result of {@link Player#getName Player#getName} called on <b>{@code value}</b>.
-         */
-        // TO-DO: Replace with enhanced swtich once it leaves preview.
-        public @NotNull StringMessage placeholder(final @NotNull String name, final @NotNull Position value) {
-            resolverBuilder.resolver(unparsed(name, "%.2f, %.2f, %.2f".formatted(value.x(), value.y(), value.z())));
-            return this;
-        }
-
-        /**
-         * Creates and adds {@link Placeholder} of <b>{@code name}</b> to be replaced with result of {@link Object#toString Object#toString} called on <b>{@code value}</b>.
+         * Creates and adds {@link Placeholder} of <b>{@code name}</b> to be replaced with <b>{@code value}</b>.
+         * <ul>
+         *     <li>{@link Keyed} ➞ <b>{@code namespaced:key}</b></li>
+         *     <li>{@link Position} ➞ <b>{@code 17.50, 64.00, -127.39}</b></li>
+         *     <li>{@link OfflinePlayer} ➞ <b>{@code PlayerName}</b> or <b>{@code 00000000-000...}</b></li>
+         * </ul>
+         * Anything else use <b>{@link Object#toString()}</b> as a converter.
          *
          * @apiNote This is an experimental API that can change or disappear at any time.
          */
-        // TO-DO: Replace with enhanced swtich once it leaves preview.
-        @Experimental
-        public @NotNull StringMessage placeholder(final @NotNull String name, final @NotNull Object value) {
-            resolverBuilder.resolver(unparsed(name, valueOf(value)));
+        @Experimental @SuppressWarnings("UnstableApiUsage")
+        public @NotNull StringMessage placeholder(final @Subst("") @NotNull String name, final @NotNull Object value) {
+            switch (value) {
+                case Keyed keyed -> resolverBuilder.resolver(unparsed(name, keyed.key().asString()));
+                case Position pos ->  resolverBuilder.resolver(unparsed(name, "%.2f, %.2f, %.2f".formatted(pos.x(), pos.y(), pos.z())));
+                case OfflinePlayer offlinePlayer -> resolverBuilder.resolver(unparsed(name, (offlinePlayer.getName() != null) ? offlinePlayer.getName() : offlinePlayer.getUniqueId().toString()));
+                default -> resolverBuilder.resolver(unparsed(name, value.toString()));
+            }
             return this;
         }
 
@@ -219,7 +203,7 @@ public abstract sealed class Message<T> implements Sendable permits Message.Stri
         @Override
         public void sendActionBar(final @NotNull Audience audience) {
             // Ignoring empty/blank messages.
-            if (message == null || ("").equals(message) == true)
+            if (message == null || message.isEmpty() == true)
                 return;
             // Parsing using MiniMessage instance provided by GlobalComponentSerializer.
             final Component component = GlobalComponentSerializer.get().deserialize(message, resolverBuilder.build());
