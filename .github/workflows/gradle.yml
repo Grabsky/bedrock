@@ -5,7 +5,7 @@ on:
     branches: ['main']
 
 permissions:
-  contents: read
+  contents: write
   packages: write
 
 jobs:
@@ -28,4 +28,4 @@ jobs:
       - name: Release
         uses: ncipollo/release-action@v1
         with:
-          tag: "1.20.1-{{ vars.GITHUB_RUN_NUMBER }}"
+          tag: '1.20.1-{{ vars.GITHUB_RUN_NUMBER }}'
