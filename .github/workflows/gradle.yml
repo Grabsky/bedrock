@@ -23,9 +23,8 @@ jobs:
         with:
           arguments: publish
         env:
-          # GitHub Packages
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Release
         uses: ncipollo/release-action@v1
         with:
-          tag: "1.20.1-${{ github.run_id }}"
+          tag: "1.20.1-${{ github.run_number }}"
