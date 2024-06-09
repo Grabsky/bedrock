@@ -49,12 +49,6 @@ javadoc {
     (options as CoreJavadocOptions).addStringOption("Xdoclint:none", "-quiet")
 }
 
-// Usage of @Deprecated methods will be replaced once similar API is introduced in the future.
-gradle.buildFinished {
-    println()
-    println("> " + version)
-}
-
 tasks.register("release") {
     print("${version.toString().split('-')[0]} #${System.getenv("GITHUB_RUN_NUMBER")}")
 }
