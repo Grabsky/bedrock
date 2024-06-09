@@ -1,6 +1,6 @@
 # bedrock
 
-![Latest Release](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.github.com%2Frepos%2FGrabsky%2Fbedrock%2Freleases%2Flatest&query=tag_name&logo=gradle&style=for-the-badge&label=%20&labelColor=%2324292F&color=%23454F5A)
+![Latest Release](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fapi.github.com%2Frepos%2FGrabsky%2Fbedrock%2Freleases%2Flatest&query=tag_name&logo=gradle&style=for-the-badge&label=%20&labelColor=%231C2128&color=%23454F5A)
 ![Build Status](https://img.shields.io/github/actions/workflow/status/Grabsky/bedrock/gradle.yml?style=for-the-badge&logo=github&logoColor=white&label=%20)
 ![CodeFactor Grade](https://img.shields.io/codefactor/grade/github/Grabsky/bedrock/main?style=for-the-badge&logo=codefactor&logoColor=white&label=%20)
 
