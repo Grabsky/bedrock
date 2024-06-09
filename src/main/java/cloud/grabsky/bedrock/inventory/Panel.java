@@ -97,13 +97,15 @@ public abstract class Panel implements InventoryHolder {
         protected Component title = InventoryType.CHEST.defaultTitle();
 
         public @NotNull Builder<T> setTitle(final @NotNull Component title) {
-            this.title = title; return this.self();
+            this.title = title;
+            return this.self();
         }
 
         protected InventoryType inventoryType = InventoryType.CHEST;
 
         public @NotNull Builder<T> setInventoryType(final @NotNull InventoryType type) {
-            this.inventoryType = type; return this.self();
+            this.inventoryType = type;
+            return this.self();
         }
 
         protected int rows = 0;
