@@ -25,9 +25,6 @@ package cloud.grabsky.bedrock.inventory;
 
 import cloud.grabsky.bedrock.util.Interval;
 import cloud.grabsky.bedrock.util.Interval.Unit;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.experimental.Accessors;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
@@ -41,15 +38,20 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.Range;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Range;
+
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 
 import static java.lang.System.currentTimeMillis;
 
@@ -139,7 +141,7 @@ public abstract class Panel implements InventoryHolder {
     }
 
     /**
-     * Sets contents of specified slot to given {@link ItemStack}. Optionally {@link ClickAction ClickAction} can be specifed.
+     * Sets contents of specified slot to given {@link ItemStack}. Optionally {@link ClickAction ClickAction} can be specified.
      */
     public void setItem(final int slot, final @Nullable ItemStack item, final @Nullable ClickAction onClick) {
         inventory.setItem(slot, item);

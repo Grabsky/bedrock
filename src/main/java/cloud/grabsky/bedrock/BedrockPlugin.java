@@ -23,9 +23,10 @@
  */
 package cloud.grabsky.bedrock;
 
+import org.bukkit.plugin.java.JavaPlugin;
+
 import lombok.AccessLevel;
 import lombok.Getter;
-import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * {@link BedrockPlugin} provides enhanced features for plugins extending it.

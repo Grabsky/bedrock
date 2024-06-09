@@ -23,17 +23,19 @@
  */
 package cloud.grabsky.bedrock.components;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.standard.StandardTags;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
 
+import org.jetbrains.annotations.NotNull;
+
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * {@link GlobalComponentSerializer} is a {@link MiniMessage} wrapper which provides
- * a way to 'modify' the underlaying {@link MiniMessage} instance by other plugins.
+ * a way to 'modify' the underlying {@link MiniMessage} instance by other plugins.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class GlobalComponentSerializer {

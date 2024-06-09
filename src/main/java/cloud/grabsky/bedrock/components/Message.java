@@ -24,10 +24,8 @@
 package cloud.grabsky.bedrock.components;
 
 import cloud.grabsky.bedrock.Sendable;
-import cloud.grabsky.bedrock.util.Interval;
 import io.papermc.paper.math.Position;
 import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
@@ -36,23 +34,22 @@ import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.intellij.lang.annotations.Subst;
-import org.jetbrains.annotations.ApiStatus.Experimental;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
 import java.util.List;
 import java.util.function.Predicate;
 
+import org.jetbrains.annotations.ApiStatus.Experimental;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import static java.lang.String.valueOf;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.minimessage.tag.resolver.Placeholder.component;
 import static net.kyori.adventure.text.minimessage.tag.resolver.Placeholder.unparsed;
@@ -267,7 +264,7 @@ public abstract sealed class Message<T> implements Sendable permits Message.Stri
         }
 
         /**
-         * Replaces all occurences of <b>{@code target}</b> with <b>{@code to}</b>.
+         * Replaces all occurrences of <b>{@code target}</b> with <b>{@code to}</b>.
          */
         public @NotNull ComponentMessage replace(final @NotNull String target, final @NotNull String replacement) {
             if (message == null)

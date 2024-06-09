@@ -23,12 +23,12 @@
  */
 package cloud.grabsky.bedrock.util;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * {@link Registry} is a container that wraps around {@link HashMap} to provide simplified method calls.
@@ -48,7 +48,7 @@ public abstract class Registry<K, V> {
     }
 
     /**
-     * Associates specified {@link K} {@code (key)} with specified {@link V} {@code (value)}. If key already exists, it's value is overriden.
+     * Associates specified {@link K} {@code (key)} with specified {@link V} {@code (value)}. If key already exists, it's value is overridden.
      */
     public @NotNull Registry<K, V> set(final @NotNull K key, final @Nullable V value) {
         internalMap.put(key, value);

@@ -26,9 +26,10 @@ package cloud.grabsky.bedrock;
 import cloud.grabsky.bedrock.components.Message;
 import net.kyori.adventure.audience.Audience;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Predicate;
+
+import org.jetbrains.annotations.NotNull;
 
 public interface Sendable {
 

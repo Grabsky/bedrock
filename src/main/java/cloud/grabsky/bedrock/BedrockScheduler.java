@@ -25,11 +25,12 @@ package cloud.grabsky.bedrock;
 
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+
+import org.jetbrains.annotations.NotNull;
 
 import lombok.AccessLevel;
 import lombok.Getter;
