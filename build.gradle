@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "cloud.grabsky"
-version = "1.20.6-${System.getenv("GITHUB_RUN_NUMBER") ?: "DEV"}"
+version = "1.21-${System.getenv("GITHUB_RUN_NUMBER") ?: "DEV"}"
 
 repositories {
     mavenLocal()
@@ -19,7 +19,7 @@ dependencies {
     compileOnly("org.projectlombok:lombok:1.18.32")
     annotationProcessor("org.projectlombok:lombok:1.18.32")
     // Paper API
-    compileOnly("io.papermc.paper:paper-api:1.20.6-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21-R0.1-SNAPSHOT")
 }
 
 publishing {
