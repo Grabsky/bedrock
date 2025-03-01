@@ -37,6 +37,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.util.Base64;
 import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -132,8 +133,18 @@ public final class ItemBuilder {
     public @NotNull ItemBuilder setSkullTexture(final @NotNull String value) {
         if (meta instanceof SkullMeta skullMeta) {
             final PlayerProfile profile = Bukkit.createProfile(EMPTY_UUID);
+            final String textures = (value.startsWith("http") == true)
+                    ? Base64.getEncoder().encodeToString(
+                            String.format("""
+                                {
+                                    "textures": {
+                                        "SKIN": { "url": "%s" }
+                                    }
+                                }
+                            """, value).trim().getBytes())
+                    : value;
             // ...
-            profile.setProperty(new ProfileProperty("textures", value));
+            profile.setProperty(new ProfileProperty("textures", textures));
             // Updating PlayerProfile inside the SkullMeta (casted ItemMeta)
             skullMeta.setPlayerProfile(profile);
         }
