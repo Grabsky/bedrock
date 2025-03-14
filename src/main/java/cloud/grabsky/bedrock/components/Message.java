@@ -227,7 +227,7 @@ public abstract sealed class Message<T> implements Sendable permits Message.Stri
             if (empty().equals(component) == true)
                 return;
             // Broadcasting message to the console.
-            Bukkit.getConsoleSender().sendMessage(message);
+            Bukkit.getConsoleSender().sendMessage(component);
             // Broadcasting message to the players.
             for (final Player player : players)
                 player.sendMessage(component);
