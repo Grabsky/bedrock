@@ -2,6 +2,7 @@ package cloud.grabsky.bedrock.components;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.format.TextFormat;
@@ -41,7 +42,14 @@ public final class ComponentBuilder {
     }
 
     public ComponentBuilder append(final @NotNull String text, final @NotNull TextFormat @Nullable ... format) {
-        internal.append(of(text, format).build());
+        if (format != null && format.length > 0) {
+            // Creating component with the provided TextFormat.
+            internal.append(of(text, format).build());
+            // Returning this instance.
+            return this;
+        }
+        // Creating component with no TextFormat specified.
+        internal.append(of(text).build());
         // Returning this instance.
         return this;
     }
