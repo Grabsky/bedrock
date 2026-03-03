@@ -27,8 +27,8 @@ jobs:
           arguments: publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VELA_USERNAME: ${{ secrets.VELA_USERNAME }}
-          VELA_PASSWORD: ${{ secrets.VELA_PASSWORD }}
+          REPSY_USERNAME: ${{ secrets.REPSY_USERNAME }}
+          REPSY_PASSWORD: ${{ secrets.REPSY_PASSWORD }}
       # Expose Release Name
       - name: Expose Release Name
         run: echo "PROJECT_RELEASE_NAME=$( ./gradlew release -q --no-rebuild )" >> $GITHUB_ENV
@@ -37,7 +37,8 @@ jobs:
         run: echo "PROJECT_TAG=$( ./gradlew tag -q --no-rebuild )" >> $GITHUB_ENV
       # Release
       - name: Release
-        uses: ncipollo/release-action@v1
+        uses: ncipollo/release-action@v2
         with:
-          name: "${{ env.PROJECT_RELEASE_NAME }}"
-          tag: "${{ env.PROJECT_TAG }}"
+          # Configuring release name and tag.
+          name: ${{ env.PROJECT_RELEASE }}
+          tag_name: ${{ env.PROJECT_TAG }}
