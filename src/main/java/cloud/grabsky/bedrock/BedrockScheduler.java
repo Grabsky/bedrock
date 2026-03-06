@@ -23,6 +23,7 @@
  */
 package cloud.grabsky.bedrock;
 
+import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -36,11 +37,11 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor(access = AccessLevel.PACKAGE)
+@RequiredArgsConstructor(access = AccessLevel.PUBLIC)
 public final class BedrockScheduler {
 
     @Getter(AccessLevel.PUBLIC)
-    private final @NotNull BedrockPlugin bedrockPlugin;
+    private final @NotNull Plugin plugin;
 
     /**
      * Schedules a synchronous task to run after {@code delay} of ticks has passed.
@@ -49,7 +50,7 @@ public final class BedrockScheduler {
      * @param task a task
      */
     public void run(final long delay, final @NotNull Consumer<BukkitTask> task) {
-        bedrockPlugin.getServer().getScheduler().runTaskLater(bedrockPlugin, task, delay);
+        plugin.getServer().getScheduler().runTaskLater(plugin, task, delay);
     }
 
     /**
@@ -58,7 +59,7 @@ public final class BedrockScheduler {
      * @param delay ticks to wait before executing the task
      */
     public void runAsync(final long delay, final @NotNull Consumer<BukkitTask> task) {
-        bedrockPlugin.getServer().getScheduler().runTaskLaterAsynchronously(bedrockPlugin, task, delay);
+        plugin.getServer().getScheduler().runTaskLaterAsynchronously(plugin, task, delay);
     }
 
     /**
@@ -83,7 +84,7 @@ public final class BedrockScheduler {
                     this.cancel();
             }
 
-        }.runTaskTimer(bedrockPlugin, delay, period);
+        }.runTaskTimer(plugin, delay, period);
     }
 
     /**
@@ -108,7 +109,7 @@ public final class BedrockScheduler {
                     this.cancel();
             }
 
-        }.runTaskTimer(bedrockPlugin, delay, period);
+        }.runTaskTimer(plugin, delay, period);
     }
 
     /**
@@ -133,7 +134,7 @@ public final class BedrockScheduler {
                     this.cancel();
             }
 
-        }.runTaskTimerAsynchronously(bedrockPlugin, delay, period);
+        }.runTaskTimerAsynchronously(plugin, delay, period);
     }
 
     /**
@@ -158,7 +159,7 @@ public final class BedrockScheduler {
                     this.cancel();
             }
 
-        }.runTaskTimerAsynchronously(bedrockPlugin, delay, period);
+        }.runTaskTimerAsynchronously(plugin, delay, period);
     }
 
 }
