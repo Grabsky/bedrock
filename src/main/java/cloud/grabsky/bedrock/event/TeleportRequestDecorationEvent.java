@@ -31,7 +31,7 @@ public class TeleportRequestDecorationEvent extends PlayerEvent {
     private final @NotNull State state;
 
     public TeleportRequestDecorationEvent(final @NotNull Player who, final @NotNull Location from, final @NotNull Location to, final @NotNull State state) {
-        super(who);
+        super(who, true);
         this.from = from;
         this.to = to;
         this.state = state;
