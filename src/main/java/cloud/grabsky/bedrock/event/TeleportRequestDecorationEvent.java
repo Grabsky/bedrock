@@ -37,6 +37,13 @@ public class TeleportRequestDecorationEvent extends PlayerEvent {
         this.state = state;
     }
 
+    public TeleportRequestDecorationEvent(final @NotNull Player who, final @NotNull Location from, final @NotNull Location to, final @NotNull State state, final boolean async) {
+        super(who, async);
+        this.from = from;
+        this.to = to;
+        this.state = state;
+    }
+
     public boolean isChangingWorlds() {
         return from.getWorld().getKey().equals(to.getWorld().getKey());
     }
